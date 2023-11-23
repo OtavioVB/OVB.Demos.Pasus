@@ -11,33 +11,22 @@ public sealed class StudentDataTransferObjectTests
     public void Test_RegularWorkflowAtDataTransferObjectCreation(string firstName, string lastName, string email, string phone, string password)
     {
         // Arrange
-        var idStudent = Guid.NewGuid();
         var correlationId = Guid.NewGuid();
         var executionUser = "UserTest";
         var sourcePlatform = ".NET/UnitTests.cs";
-        var createdAt = DateTime.UtcNow;
 
         // Act
-        var student = new Student(
-            id: idStudent,
+        var student = Student.BuildStudent(
             correlationId: correlationId,
             sourcePlatform: sourcePlatform,
             executionUser: executionUser,
-            createdAt: createdAt,
             firstName: firstName,
             lastName: lastName,
             email: email, 
             phone: phone,
-            password: password,
-            lastCorrelationId: correlationId,
-            lastSourcePlatform: sourcePlatform,
-            lastExecutionUser: executionUser,
-            lastModifiedAt: createdAt);
+            password: password);
 
         // Assert
-        Assert.Equal(
-           expected: idStudent,
-           actual: student.Id);
         Assert.Equal(
            expected: correlationId,
            actual: student.CorrelationId);
@@ -48,9 +37,6 @@ public sealed class StudentDataTransferObjectTests
            expected: sourcePlatform,
            actual: student.SourcePlatform);
         Assert.Equal(
-           expected: createdAt,
-           actual: student.CreatedAt);
-        Assert.Equal(
            expected: correlationId,
            actual: student.LastCorrelationId);
         Assert.Equal(
@@ -59,9 +45,6 @@ public sealed class StudentDataTransferObjectTests
         Assert.Equal(
            expected: sourcePlatform,
            actual: student.LastSourcePlatform);
-        Assert.Equal(
-           expected: createdAt,
-           actual: student.LastModifiedAt);
         Assert.Equal(
             expected: firstName, 
             actual: student.FirstName);
