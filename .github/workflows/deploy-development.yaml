@@ -1,16 +1,15 @@
-name: Sonar Cloud | Analysis Static Code
+name: Deploy on Development Environment
 
 on:
   push:
     branches:
       - main    
-      - development
-      - staging
   workflow_dispatch:
 
 jobs:
   staticcodeanalysis:    
     runs-on: ubuntu-latest
+    environment: Development
     steps:
     - name: Set up JDK 17 for Static Analysis
       uses: actions/setup-java@v3
@@ -38,7 +37,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: pwsh
       run: |
-        .\.sonar\scanner\dotnet-sonarscanner begin /k:"OtavioVB_OVB.Demos.Eschody" /o:"otaviovb-1" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="/tst/**/*,benchs/**,migrations/**" /d:sonar.exclusions="/tst/**/*,benchs/**,migrations/**"
+        .\.sonar\scanner\dotnet-sonarscanner begin /k:"OtavioVB_OVB.Demos.Eschody" /o:"otaviovb-1" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="/tst/**/*,benchs/**,migrations/**,Dockerfile" /d:sonar.exclusions="/tst/**/*,benchs/**,migrations/**,Dockerfile"
         dotnet build --no-restore
         dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="Coverage/" ./tst/OVB.Demos.Eschody.UnitTests/OVB.Demos.Eschody.UnitTests.csproj
         ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
