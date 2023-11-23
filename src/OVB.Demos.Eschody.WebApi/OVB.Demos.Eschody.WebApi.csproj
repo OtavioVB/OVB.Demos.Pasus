@@ -15,4 +15,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OVB.Demos.Eschody.Application\OVB.Demos.Eschody.Application.csproj" />
+    <ProjectReference Include="..\OVB.Demos.Eschody.Domain\OVB.Demos.Eschody.Domain.csproj" />
+    <ProjectReference Include="..\OVB.Demos.Eschody.Infrascructure\OVB.Demos.Eschody.Infrascructure.csproj" />
+  </ItemGroup>
+
 </Project>

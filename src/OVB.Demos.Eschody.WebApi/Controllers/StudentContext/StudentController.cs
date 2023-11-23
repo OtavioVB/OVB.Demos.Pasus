@@ -1,13 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OVB.Demos.Eschody.Libraries.ValueObjects;
+using OVB.Demos.Eschody.WebApi.Controllers.Base;
 using System.Net.Mime;
 
 namespace OVB.Demos.Eschody.WebApi.Controllers.StudentContext;
 
 [Route("api/v1/backoffice/students")]
 [ApiController]
-public sealed class StudentController : ControllerBase
+public sealed class StudentController : CustomControllerBase
 {
     [HttpPost]
     [Consumes(MediaTypeNames.Application.Json)]
@@ -27,6 +29,16 @@ public sealed class StudentController : ControllerBase
         [FromHeader(Name = "X-Execution-User")] string executionUser,
         CancellationToken cancellationToken)
     {
+        var auditableInfo = AuditableInfoValueObject.Build(
+            correlationId: correlationId,
+            sourcePlatform: sourcePlatform,
+            executionUser: executionUser,
+            requestedAt: DateTime.UtcNow);
+        if (auditableInfo.IsValid == false)
+            return StatusCode(
+                statusCode: StatusCodes.Status422UnprocessableEntity,
+                value: GetUnprocessableEntityForInvalidAuditable());
+
         return StatusCode(StatusCodes.Status503ServiceUnavailable, null);
     }
 }

@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OVB.Demos.Eschody.Libraries.NotificationContext\OVB.Demos.Eschody.Libraries.NotificationContext.csproj" />
+    <ProjectReference Include="..\OVB.Demos.Eschody.Libraries.ProcessResultContext\OVB.Demos.Eschody.Libraries.ProcessResultContext.csproj" />
+  </ItemGroup>
+
 </Project>

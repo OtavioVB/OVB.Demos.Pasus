@@ -17,9 +17,7 @@ public sealed class StudentDataTransferObjectTests
 
         // Act
         var student = Student.BuildStudent(
-            correlationId: correlationId,
-            sourcePlatform: sourcePlatform,
-            executionUser: executionUser,
+            auditableInfo: new Libraries.ValueObjects.AuditableInfoValueObject(correlationId, sourcePlatform, executionUser),
             firstName: firstName,
             lastName: lastName,
             email: email, 
@@ -32,10 +30,10 @@ public sealed class StudentDataTransferObjectTests
             actual: student.Id);
         Assert.Equal(
             expected: DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm"),
-            actual: student.CreatedAt.ToString("dd/MM/yyyy HH:mm"));
+            actual: student.CreatedAt!.Value.ToString("dd/MM/yyyy HH:mm"));
         Assert.Equal(
             expected: DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm"),
-            actual: student.LastModifiedAt.ToString("dd/MM/yyyy HH:mm"));
+            actual: student.LastModifiedAt!.Value.ToString("dd/MM/yyyy HH:mm"));
         Assert.Equal(
            expected: correlationId,
            actual: student.CorrelationId);

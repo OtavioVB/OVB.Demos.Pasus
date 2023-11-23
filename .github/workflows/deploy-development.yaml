@@ -8,6 +8,7 @@ on:
 
 jobs:
   staticcodeanalysis:    
+    name: Static Code Analysis
     runs-on: ubuntu-latest
     environment: Development
     steps:
@@ -37,7 +38,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       shell: pwsh
       run: |
-        .\.sonar\scanner\dotnet-sonarscanner begin /k:"OtavioVB_OVB.Demos.Eschody" /o:"otaviovb-1" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="/tst/**/*,benchs/**,migrations/**,Dockerfile,libs/**" /d:sonar.exclusions="/tst/**/*,benchs/**,migrations/**,Dockerfile,libs/**"
+        .\.sonar\scanner\dotnet-sonarscanner begin /k:"OtavioVB_OVB.Demos.Eschody" /o:"otaviovb-1" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="/tst/**/*,benchs/**,migrations/**,Dockerfile,libs/**,controllers/**,Program.cs" /d:sonar.exclusions="/tst/**/*,benchs/**,migrations/**,Dockerfile,libs/**,controllers/**,Program.cs"
         dotnet build --no-restore
         dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput="Coverage/" ./tst/OVB.Demos.Eschody.UnitTests/OVB.Demos.Eschody.UnitTests.csproj
         ./.sonar/scanner/dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"

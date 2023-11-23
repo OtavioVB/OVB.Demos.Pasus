@@ -30,14 +30,14 @@ public sealed record Student
 
     private void SetAuditableInfo(AuditableInfoValueObject auditableInfo)
     {
-        CorrelationId = auditableInfo.CorrelationId;
-        ExecutionUser = auditableInfo.ExecutionUser;
-        SourcePlatform = auditableInfo.SourcePlatform;
+        CorrelationId = auditableInfo.GetCorrelationId();
+        ExecutionUser = auditableInfo.GetExecutionUser();
+        SourcePlatform = auditableInfo.GetSourcePlatform();
         CreatedAt = DateTime.UtcNow;
         LastModifiedAt = DateTime.UtcNow;
-        LastCorrelationId = auditableInfo.CorrelationId;
-        LastExecutionUser = auditableInfo.ExecutionUser;
-        LastSourcePlatform = auditableInfo.SourcePlatform;
+        LastCorrelationId = auditableInfo.GetCorrelationId();
+        LastExecutionUser = auditableInfo.GetExecutionUser();
+        LastSourcePlatform = auditableInfo.GetSourcePlatform();
     }
 
     private void SetContent(string firstName, string lastName, string email, string phone, string password)

@@ -5,34 +5,43 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5AD59E59-E620-4347-9327-2C883BB9B501}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.WebApi", "src\OVB.Demos.Eschody.WebApi\OVB.Demos.Eschody.WebApi.csproj", "{3F3BADA6-8AC4-4BC1-AC95-13CA84456651}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.WebApi", "src\OVB.Demos.Eschody.WebApi\OVB.Demos.Eschody.WebApi.csproj", "{3F3BADA6-8AC4-4BC1-AC95-13CA84456651}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F2132CE0-2562-433E-9DF1-DEAFE49F893F}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Application", "src\OVB.Demos.Eschody.Application\OVB.Demos.Eschody.Application.csproj", "{48ADBE9A-25F4-4541-85E9-EBDB1C68A9D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Application", "src\OVB.Demos.Eschody.Application\OVB.Demos.Eschody.Application.csproj", "{48ADBE9A-25F4-4541-85E9-EBDB1C68A9D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Domain", "src\OVB.Demos.Eschody.Domain\OVB.Demos.Eschody.Domain.csproj", "{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Domain", "src\OVB.Demos.Eschody.Domain\OVB.Demos.Eschody.Domain.csproj", "{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Infrascructure", "src\OVB.Demos.Eschody.Infrascructure\OVB.Demos.Eschody.Infrascructure.csproj", "{23A274D0-E450-46BA-A2DE-513B296767CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Infrascructure", "src\OVB.Demos.Eschody.Infrascructure\OVB.Demos.Eschody.Infrascructure.csproj", "{23A274D0-E450-46BA-A2DE-513B296767CF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tst", "tst", "{51AD6B61-24C5-43DC-8668-CACDC16A2B9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.UnitTests", "tst\OVB.Demos.Eschody.UnitTests\OVB.Demos.Eschody.UnitTests.csproj", "{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.UnitTests", "tst\OVB.Demos.Eschody.UnitTests\OVB.Demos.Eschody.UnitTests.csproj", "{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.IntegrationTests", "tst\OVB.Demos.Eschody.IntegrationTests\OVB.Demos.Eschody.IntegrationTests.csproj", "{A57BF2A2-B56D-44D9-A795-518D1733DD0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.IntegrationTests", "tst\OVB.Demos.Eschody.IntegrationTests\OVB.Demos.Eschody.IntegrationTests.csproj", "{A57BF2A2-B56D-44D9-A795-518D1733DD0B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{4139ADEA-9106-41BD-A603-73D30A023B93}"
 	ProjectSection(SolutionItems) = preProject
 		devops\docker-compose.Local.yaml = devops\docker-compose.Local.yaml
+		devops\otel-collector-config.yaml = devops\otel-collector-config.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{82EE1549-CB36-4A0C-BCE3-D13C6F6DB931}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\analysis-static-code.yaml = .github\workflows\analysis-static-code.yaml
+		.github\workflows\deploy-development.yaml = .github\workflows\deploy-development.yaml
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "libs", "libs", "{06F64783-DE99-43E2-A135-54B496FE5161}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries.ValueObjects", "libs\OVB.Demos.Eschody.Libraries.ValueObjects\OVB.Demos.Eschody.Libraries.ValueObjects.csproj", "{5B3FB69F-785E-4DA7-A540-0783F464C124}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries.ProcessResultContext", "libs\OVB.Demos.Eschody.Libraries.ProcessResultContext\OVB.Demos.Eschody.Libraries.ProcessResultContext.csproj", "{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Libraries.NotificationContext", "libs\OVB.Demos.Eschody.Libraries.NotificationContext\OVB.Demos.Eschody.Libraries.NotificationContext.csproj", "{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +73,18 @@ Global
 		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B3FB69F-785E-4DA7-A540-0783F464C124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B3FB69F-785E-4DA7-A540-0783F464C124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B3FB69F-785E-4DA7-A540-0783F464C124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B3FB69F-785E-4DA7-A540-0783F464C124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,6 +97,9 @@ Global
 		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
 		{A57BF2A2-B56D-44D9-A795-518D1733DD0B} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
 		{82EE1549-CB36-4A0C-BCE3-D13C6F6DB931} = {4139ADEA-9106-41BD-A603-73D30A023B93}
+		{5B3FB69F-785E-4DA7-A540-0783F464C124} = {06F64783-DE99-43E2-A135-54B496FE5161}
+		{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB} = {06F64783-DE99-43E2-A135-54B496FE5161}
+		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A} = {06F64783-DE99-43E2-A135-54B496FE5161}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B9783B5-3F49-4148-B4E4-4A3D045514D2}

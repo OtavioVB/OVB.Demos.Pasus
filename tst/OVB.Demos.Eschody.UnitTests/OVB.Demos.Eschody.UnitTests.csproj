@@ -30,4 +30,10 @@
     <ProjectReference Include="..\..\src\OVB.Demos.Eschody.Domain\OVB.Demos.Eschody.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Infrascructure\" />
+    <Folder Include="Application\" />
+    <Folder Include="WebApi\" />
+  </ItemGroup>
+
 </Project>
