@@ -27,6 +27,15 @@ public sealed class StudentDataTransferObjectTests
             password: password);
 
         // Assert
+        Assert.NotEqual(
+            expected: Guid.Empty,
+            actual: student.Id);
+        Assert.Equal(
+            expected: DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm"),
+            actual: student.CreatedAt.ToString("dd/MM/yyyy HH:mm"));
+        Assert.Equal(
+            expected: DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm"),
+            actual: student.LastModifiedAt.ToString("dd/MM/yyyy HH:mm"));
         Assert.Equal(
            expected: correlationId,
            actual: student.CorrelationId);

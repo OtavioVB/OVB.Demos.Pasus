@@ -1,73 +1,66 @@
-﻿using System.Data;
+﻿using OVB.Demos.Eschody.Libraries.ValueObjects;
+using System.Data;
 
 namespace OVB.Demos.Eschody.Domain.StudentContext;
 
 public sealed record Student
 {
-    private Student(
-        Guid id, 
-        
-        Guid correlationId, string sourcePlatform, string executionUser, DateTime createdAt, 
-        
-        string firstName, string lastName, string email, string phone, string password,
-        
-        Guid lastCorrelationId, string lastSourcePlatform, string lastExecutionUser, DateTime lastModifiedAt)
+    private Student(Guid id)
     {
         Id = id;
-        CorrelationId = correlationId;
-        SourcePlatform = sourcePlatform;
-        ExecutionUser = executionUser;
-        CreatedAt = createdAt;
+    }
+
+    public Guid Id { get; }
+
+    public Guid? CorrelationId { get; private set; }
+    public string? SourcePlatform { get; private set; }
+    public string? ExecutionUser { get; private set; }
+    public DateTime? CreatedAt { get; private set; }
+
+    public string? FirstName { get; private set; }
+    public string? LastName { get; private set; }
+    public string? Email { get; private set; }
+    public string? Phone { get; private set; }
+    public string? Password { get; private set; }
+
+    public Guid? LastCorrelationId { get; private set; }
+    public string? LastSourcePlatform { get; private set; }
+    public string? LastExecutionUser { get; private set; }
+    public DateTime? LastModifiedAt { get; private set; }
+
+    private void SetAuditableInfo(AuditableInfoValueObject auditableInfo)
+    {
+        CorrelationId = auditableInfo.CorrelationId;
+        ExecutionUser = auditableInfo.ExecutionUser;
+        SourcePlatform = auditableInfo.SourcePlatform;
+        CreatedAt = DateTime.UtcNow;
+        LastModifiedAt = DateTime.UtcNow;
+        LastCorrelationId = auditableInfo.CorrelationId;
+        LastExecutionUser = auditableInfo.ExecutionUser;
+        LastSourcePlatform = auditableInfo.SourcePlatform;
+    }
+
+    private void SetContent(string firstName, string lastName, string email, string phone, string password)
+    {
         FirstName = firstName;
         LastName = lastName;
         Email = email;
         Phone = phone;
         Password = password;
-        LastCorrelationId = lastCorrelationId;
-        LastSourcePlatform = lastSourcePlatform;
-        LastExecutionUser = lastExecutionUser;
-        LastModifiedAt = lastModifiedAt;
     }
 
-    public Guid Id { get; }
-
-    public Guid CorrelationId { get; }
-    public string SourcePlatform { get; }
-    public string ExecutionUser { get; }
-    public DateTime CreatedAt { get; }
-
-    public string FirstName { get; }
-    public string LastName { get; }
-    public string Email { get; }
-    public string Phone { get; }
-    public string Password { get; }
-
-    public Guid LastCorrelationId { get; }
-    public string LastSourcePlatform { get; }
-    public string LastExecutionUser { get; }
-    public DateTime LastModifiedAt { get; }
-
     public static Student BuildStudent(
-        Guid correlationId,
-        string sourcePlatform,
-        string executionUser,
+        AuditableInfoValueObject auditableInfo,
         string firstName,
         string lastName,
         string email,
         string phone,
-        string password) => new Student(
-            id: Guid.NewGuid(),
-            correlationId: correlationId,
-            sourcePlatform: sourcePlatform,
-            executionUser: executionUser,
-            createdAt: DateTime.UtcNow,
-            firstName: firstName,
-            lastName: lastName, 
-            email: email,
-            phone: phone,
-            password: password,
-            lastCorrelationId: correlationId,
-            lastSourcePlatform: sourcePlatform,
-            lastExecutionUser: executionUser,
-            lastModifiedAt: DateTime.UtcNow);
+        string password)
+    {
+       var student = new Student(
+            id: Guid.NewGuid());
+        student.SetAuditableInfo(auditableInfo);
+        student.SetContent(firstName, lastName, email, phone, password);
+        return student;
+    }
 }
