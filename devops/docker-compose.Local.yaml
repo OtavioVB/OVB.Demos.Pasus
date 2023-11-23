@@ -1,1 +1,72 @@
 version: "3.8"
+
+services:
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    restart: unless-stopped
+    ports:
+      - 9411:9411
+    networks:
+      - ovb-demos-eschody
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    container_name: otel-collector
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"  
+    depends_on:
+      - jaeger
+    links:
+      - jaeger
+    networks:
+      - ovb-demos-eschody
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    environment:
+      RABBITMQ_DEFAULT_USER: otavio.carmanini@eschody.com.br
+      RABBITMQ_DEFAULT_PASS: 123456
+    ports:
+      - 5672:5672
+      - 15672:15672
+    restart: always
+    networks:
+      - ovb-demos-eschody
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_USER: otavio.carmanini@eschody.com.br
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - ovb-demos-eschody
+
+  pgadmin:
+    image: dpage/pgadmin4
+    user: root
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "otavio.carmanini@eschody.com.br"
+      PGADMIN_DEFAULT_PASSWORD: "123456"
+    ports:
+      - "8080:80"
+    restart: always
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    networks:
+      - ovb-demos-eschody
+
+networks:
+  ovb-demos-eschody:
+    driver: bridge

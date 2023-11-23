@@ -7,7 +7,8 @@
 - SonarCloud/Open Cover
 - Github Actions/Workflows
 - PostgreeSQL/PostgreeAdmin
-- Jaeger/OpenTelemetry
+- ZipKin/OpenTelemetry
+- RabbitMq
 
 ## Conceitos Utilizados
 - Análise Estática de Código
