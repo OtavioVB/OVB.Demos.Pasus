@@ -1,8 +1,12 @@
 
 namespace OVB.Demos.Eschody.WebApi;
 
-public static partial class Program
+public partial class Program
 {
+    protected Program()
+    {
+    }
+
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
