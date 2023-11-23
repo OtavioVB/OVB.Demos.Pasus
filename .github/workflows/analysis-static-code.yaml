@@ -1,9 +1,11 @@
-name: Analysis Static Code
+name: Sonar Cloud | Analysis Static Code
 
 on:
   push:
     branches:
-      - main
+      - main    
+      - development
+      - staging
   workflow_dispatch:
 
 jobs:

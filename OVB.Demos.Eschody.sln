@@ -29,6 +29,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{4139AD
 		devops\docker-compose.Local.yaml = devops\docker-compose.Local.yaml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{82EE1549-CB36-4A0C-BCE3-D13C6F6DB931}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\analysis-static-code.yaml = .github\workflows\analysis-static-code.yaml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -70,6 +75,7 @@ Global
 		{23A274D0-E450-46BA-A2DE-513B296767CF} = {5AD59E59-E620-4347-9327-2C883BB9B501}
 		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
 		{A57BF2A2-B56D-44D9-A795-518D1733DD0B} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
+		{82EE1549-CB36-4A0C-BCE3-D13C6F6DB931} = {4139ADEA-9106-41BD-A603-73D30A023B93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B9783B5-3F49-4148-B4E4-4A3D045514D2}
