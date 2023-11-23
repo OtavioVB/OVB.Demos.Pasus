@@ -1,0 +1,77 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5AD59E59-E620-4347-9327-2C883BB9B501}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.WebApi", "src\OVB.Demos.Eschody.WebApi\OVB.Demos.Eschody.WebApi.csproj", "{3F3BADA6-8AC4-4BC1-AC95-13CA84456651}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{F2132CE0-2562-433E-9DF1-DEAFE49F893F}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Application", "src\OVB.Demos.Eschody.Application\OVB.Demos.Eschody.Application.csproj", "{48ADBE9A-25F4-4541-85E9-EBDB1C68A9D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Domain", "src\OVB.Demos.Eschody.Domain\OVB.Demos.Eschody.Domain.csproj", "{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Infrascructure", "src\OVB.Demos.Eschody.Infrascructure\OVB.Demos.Eschody.Infrascructure.csproj", "{23A274D0-E450-46BA-A2DE-513B296767CF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tst", "tst", "{51AD6B61-24C5-43DC-8668-CACDC16A2B9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.UnitTests", "tst\OVB.Demos.Eschody.UnitTests\OVB.Demos.Eschody.UnitTests.csproj", "{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.IntegrationTests", "tst\OVB.Demos.Eschody.IntegrationTests\OVB.Demos.Eschody.IntegrationTests.csproj", "{A57BF2A2-B56D-44D9-A795-518D1733DD0B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{4139ADEA-9106-41BD-A603-73D30A023B93}"
+	ProjectSection(SolutionItems) = preProject
+		devops\docker-compose.Local.yaml = devops\docker-compose.Local.yaml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3F3BADA6-8AC4-4BC1-AC95-13CA84456651}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F3BADA6-8AC4-4BC1-AC95-13CA84456651}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F3BADA6-8AC4-4BC1-AC95-13CA84456651}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F3BADA6-8AC4-4BC1-AC95-13CA84456651}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48ADBE9A-25F4-4541-85E9-EBDB1C68A9D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48ADBE9A-25F4-4541-85E9-EBDB1C68A9D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48ADBE9A-25F4-4541-85E9-EBDB1C68A9D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48ADBE9A-25F4-4541-85E9-EBDB1C68A9D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23A274D0-E450-46BA-A2DE-513B296767CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23A274D0-E450-46BA-A2DE-513B296767CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23A274D0-E450-46BA-A2DE-513B296767CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23A274D0-E450-46BA-A2DE-513B296767CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F3BADA6-8AC4-4BC1-AC95-13CA84456651} = {5AD59E59-E620-4347-9327-2C883BB9B501}
+		{48ADBE9A-25F4-4541-85E9-EBDB1C68A9D9} = {5AD59E59-E620-4347-9327-2C883BB9B501}
+		{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC} = {5AD59E59-E620-4347-9327-2C883BB9B501}
+		{23A274D0-E450-46BA-A2DE-513B296767CF} = {5AD59E59-E620-4347-9327-2C883BB9B501}
+		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
+		{A57BF2A2-B56D-44D9-A795-518D1733DD0B} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5B9783B5-3F49-4148-B4E4-4A3D045514D2}
+	EndGlobalSection
+EndGlobal
