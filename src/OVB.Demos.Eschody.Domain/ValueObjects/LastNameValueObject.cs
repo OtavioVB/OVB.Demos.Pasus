@@ -27,7 +27,7 @@ public readonly struct LastNameValueObject
     }
 
     public const int LastNameMaxLength = 32;
-    public const int LastNameMinLength = 5;
+    public const int LastNameMinLength = 2;
 
     public static LastNameValueObject Build(string lastName)
     {

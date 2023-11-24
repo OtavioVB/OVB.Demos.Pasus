@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Domain.ValueObjects;
+﻿using Olizia.Demos.Resale.ValueObjects.Exceptions;
+using OVB.Demos.Eschody.Domain.ValueObjects;
 
 namespace OVB.Demos.Eschody.UnitTests.Domain.ValueObjects;
 
@@ -36,6 +37,7 @@ public sealed class EmailValueObjectTests
         // Act
 
         // Assert
+        Assert.Throws<EschodyValueObjectException>(emailValueObject.GetEmail());
         Assert.False(emailValueObject.IsValid);
         Assert.False(emailValueObject.GetProcessResult().IsSuccess);
         Assert.False(emailValueObject.GetProcessResult().IsPartial);

@@ -27,7 +27,7 @@ public readonly struct FirstNameValueObject
     }
 
     public const int FirstNameMaxLength = 32;
-    public const int FirstNameMinLength = 5;
+    public const int FirstNameMinLength = 2;
 
     public static FirstNameValueObject Build(string firstName)
     {
