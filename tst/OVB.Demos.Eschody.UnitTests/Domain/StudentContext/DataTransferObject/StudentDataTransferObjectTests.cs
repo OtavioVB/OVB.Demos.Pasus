@@ -1,4 +1,5 @@
 ﻿using OVB.Demos.Eschody.Domain.StudentContext;
+using OVB.Demos.Eschody.Libraries.ValueObjects;
 
 namespace OVB.Demos.Eschody.UnitTests.Domain.StudentContext.DataTransferObject;
 
@@ -14,10 +15,11 @@ public sealed class StudentDataTransferObjectTests
         var correlationId = Guid.NewGuid();
         var executionUser = "UserTest";
         var sourcePlatform = ".NET/UnitTests.cs";
+        var auditableInfo = AuditableInfoValueObject.Build(correlationId, sourcePlatform, executionUser, DateTime.UtcNow);
 
         // Act
         var student = Student.BuildStudent(
-            auditableInfo: new Libraries.ValueObjects.AuditableInfoValueObject(correlationId, sourcePlatform, executionUser),
+            auditableInfo: auditableInfo,
             firstName: firstName,
             lastName: lastName,
             email: email, 
@@ -29,10 +31,10 @@ public sealed class StudentDataTransferObjectTests
             expected: Guid.Empty,
             actual: student.Id);
         Assert.Equal(
-            expected: DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm"),
+            expected: auditableInfo.GetRequestedAt().ToString("dd/MM/yyyy HH:mm"),
             actual: student.CreatedAt!.Value.ToString("dd/MM/yyyy HH:mm"));
         Assert.Equal(
-            expected: DateTime.UtcNow.ToString("dd/MM/yyyy HH:mm"),
+            expected: auditableInfo.GetRequestedAt().ToString("dd/MM/yyyy HH:mm"),
             actual: student.LastModifiedAt!.Value.ToString("dd/MM/yyyy HH:mm"));
         Assert.Equal(
            expected: correlationId,

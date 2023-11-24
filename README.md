@@ -22,3 +22,10 @@
 - Observabilidade
 - Traces e Métricas
 - Logs de Serviços
+- Testes de Unidade
+- Testes de Integração
+- Padrão AAA para Testes
+- Notification Pattern
+- Command Handler Pattern
+- Command Pattern
+- Singleton Pattern
