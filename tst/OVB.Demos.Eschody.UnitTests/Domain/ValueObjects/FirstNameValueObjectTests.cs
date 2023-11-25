@@ -1,5 +1,5 @@
-﻿using Olizia.Demos.Resale.ValueObjects.Exceptions;
-using OVB.Demos.Eschody.Domain.ValueObjects;
+﻿using OVB.Demos.Eschody.Domain.ValueObjects;
+using OVB.Demos.Eschody.Libraries.ValueObjects.Exceptions;
 using System.Globalization;
 
 namespace OVB.Demos.Eschody.UnitTests.Domain.ValueObjects;

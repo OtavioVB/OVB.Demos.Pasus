@@ -1,4 +1,4 @@
-﻿namespace Olizia.Demos.Resale.ValueObjects.Exceptions;
+﻿namespace OVB.Demos.Eschody.Libraries.ValueObjects.Exceptions;
 
 public sealed class EschodyValueObjectException : Exception
 {

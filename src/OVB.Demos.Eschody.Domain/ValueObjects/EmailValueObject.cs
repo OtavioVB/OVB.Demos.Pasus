@@ -1,6 +1,6 @@
-﻿using Olizia.Demos.Resale.ValueObjects.Exceptions;
-using OVB.Demos.Eschody.Libraries.NotificationContext;
+﻿using OVB.Demos.Eschody.Libraries.NotificationContext;
 using OVB.Demos.Eschody.Libraries.ProcessResultContext;
+using OVB.Demos.Eschody.Libraries.ValueObjects.Exceptions;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -46,7 +46,7 @@ public readonly struct EmailValueObject
                     code: "ESC06",
                     message: $"O email precisa conter pelo menos {EmailMinLength} caracteres."));
 
-        if (Regex.IsMatch(email, "^[a-z0-9.-]+@[a-z0-9]+\\\\.[a-z]+(\\\\.[a-z]+)?$") == false)
+        if (Regex.IsMatch(email, "^[a-z0-9.-]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$") == false)
             notifications.Add(
                 item: Notification.BuildErrorfullNotification(
                     code: "ESC07",
