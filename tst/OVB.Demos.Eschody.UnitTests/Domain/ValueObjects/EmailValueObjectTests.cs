@@ -18,6 +18,7 @@ public sealed class EmailValueObjectTests
         // Act
 
         // Assert
+        Assert.Equal(email, emailValueObject.GetEmail());
         Assert.True(emailValueObject.IsValid);
         Assert.True(emailValueObject.GetProcessResult().IsSuccess);
         Assert.False(emailValueObject.GetProcessResult().IsPartial);

@@ -47,14 +47,14 @@ public readonly struct EmailValueObject
                     code: "ESC06",
                     message: $"O email precisa conter pelo menos {EmailMinLength} caracteres."));
 
-        if (Regex.IsMatch(email, EmailRegex) == false)
+        if (!Regex.IsMatch(email, EmailRegex))
             notifications.Add(
                 item: Notification.BuildErrorfullNotification(
                     code: "ESC07",
                     message: $"O email inserido precisa ser válido."));
 
 
-        if (notifications.Count() > 0)
+        if (notifications.Count > 0)
         {
             return new EmailValueObject(
                 isValid: false,
