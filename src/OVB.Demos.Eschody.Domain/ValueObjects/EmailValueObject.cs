@@ -29,7 +29,6 @@ public readonly struct EmailValueObject
 
     public const int EmailMaxLength = 255;
     public const int EmailMinLength = 5;
-    public const string EmailRegex = "^[a-z0-9.-]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$";
 
     public static EmailValueObject Build(string email)
     {
@@ -47,7 +46,7 @@ public readonly struct EmailValueObject
                     code: "ESC06",
                     message: $"O email precisa conter pelo menos {EmailMinLength} caracteres."));
 
-        if (!Regex.IsMatch(email, EmailRegex))
+        if (Regex.IsMatch(email, "^[a-z0-9.-]+@[a-z0-9]+\\\\.[a-z]+(\\\\.[a-z]+)?$") == false)
             notifications.Add(
                 item: Notification.BuildErrorfullNotification(
                     code: "ESC07",
