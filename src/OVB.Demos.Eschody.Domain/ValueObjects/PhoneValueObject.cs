@@ -40,7 +40,7 @@ public readonly struct PhoneValueObject
 
         foreach (var character in phone)
         {
-            if (char.IsDigit(character) == false)
+            if (!char.IsDigit(character))
             {
                 notifications.Add(
                     item: Notification.BuildErrorfullNotification(

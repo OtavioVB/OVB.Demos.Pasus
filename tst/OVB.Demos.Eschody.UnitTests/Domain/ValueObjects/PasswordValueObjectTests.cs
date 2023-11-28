@@ -29,12 +29,28 @@ public sealed class PasswordValueObjectTests
     }
 
     [Theory]
+    [InlineData("8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92")]
+    public void Password_Encrypt_Should_Be_Valid(string encryptedPassword)
+    {
+        // Arrange
+        var passwordValueObject = PasswordValueObject.Build(encryptedPassword, true);
+
+        // Act
+
+        // Assert
+        Assert.Equal(encryptedPassword.ToUpper(), passwordValueObject.GetPassword().ToUpper());
+    }
+
+    [Theory]
     [InlineData("45454")]
+    [InlineData("454544454544454544454544454544454544454544")]
     [InlineData("teste")]
     public void Phone_Should_Be_Not_Valid(string password)
     {
         // Arrange
         var passwordValueObject = PasswordValueObject.Build(password, false);
+
+        // Act
 
         // Assert
         Assert.Throws<EschodyValueObjectException>(passwordValueObject.GetPassword);
