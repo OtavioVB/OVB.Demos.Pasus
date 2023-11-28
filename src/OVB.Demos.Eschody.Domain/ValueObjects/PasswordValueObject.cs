@@ -30,6 +30,7 @@ public readonly struct PasswordValueObject
 
     public const int PasswordMaxLength = 32;
     public const int PasswordMinLength = 6;
+    public const int PasswordEncryptLength = 64;
 
     public static PasswordValueObject Build(string password, bool isEncrypted)
     {
