@@ -22,8 +22,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tst", "tst", "{51AD6B61-24C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.UnitTests", "tst\OVB.Demos.Eschody.UnitTests\OVB.Demos.Eschody.UnitTests.csproj", "{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.IntegrationTests", "tst\OVB.Demos.Eschody.IntegrationTests\OVB.Demos.Eschody.IntegrationTests.csproj", "{A57BF2A2-B56D-44D9-A795-518D1733DD0B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{4139ADEA-9106-41BD-A603-73D30A023B93}"
 	ProjectSection(SolutionItems) = preProject
 		devops\docker-compose.Local.yaml = devops\docker-compose.Local.yaml
@@ -41,7 +39,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries.ProcessResultContext", "libs\OVB.Demos.Eschody.Libraries.ProcessResultContext\OVB.Demos.Eschody.Libraries.ProcessResultContext.csproj", "{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Libraries.NotificationContext", "libs\OVB.Demos.Eschody.Libraries.NotificationContext\OVB.Demos.Eschody.Libraries.NotificationContext.csproj", "{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries.NotificationContext", "libs\OVB.Demos.Eschody.Libraries.NotificationContext\OVB.Demos.Eschody.Libraries.NotificationContext.csproj", "{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.IntegrationTests", "tst\OVB.Demos.Eschody.IntegrationTests\OVB.Demos.Eschody.IntegrationTests.csproj", "{4A312D0C-27A7-4C82-89E0-78B48750B85A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,10 +69,6 @@ Global
 		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A57BF2A2-B56D-44D9-A795-518D1733DD0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B3FB69F-785E-4DA7-A540-0783F464C124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B3FB69F-785E-4DA7-A540-0783F464C124}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B3FB69F-785E-4DA7-A540-0783F464C124}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,6 +81,10 @@ Global
 		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A312D0C-27A7-4C82-89E0-78B48750B85A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A312D0C-27A7-4C82-89E0-78B48750B85A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A312D0C-27A7-4C82-89E0-78B48750B85A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A312D0C-27A7-4C82-89E0-78B48750B85A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,11 +95,11 @@ Global
 		{B242AD3E-00A6-4502-8C50-AE7E0EA24EBC} = {5AD59E59-E620-4347-9327-2C883BB9B501}
 		{23A274D0-E450-46BA-A2DE-513B296767CF} = {5AD59E59-E620-4347-9327-2C883BB9B501}
 		{3A448B96-1E6E-4159-AB47-6C9CCBA7C0EC} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
-		{A57BF2A2-B56D-44D9-A795-518D1733DD0B} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
 		{82EE1549-CB36-4A0C-BCE3-D13C6F6DB931} = {4139ADEA-9106-41BD-A603-73D30A023B93}
 		{5B3FB69F-785E-4DA7-A540-0783F464C124} = {06F64783-DE99-43E2-A135-54B496FE5161}
 		{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB} = {06F64783-DE99-43E2-A135-54B496FE5161}
 		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A} = {06F64783-DE99-43E2-A135-54B496FE5161}
+		{4A312D0C-27A7-4C82-89E0-78B48750B85A} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B9783B5-3F49-4148-B4E4-4A3D045514D2}

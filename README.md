@@ -24,6 +24,7 @@
 - Logs de Serviços
 - Testes de Unidade
 - Testes de Integração
+- Padrão BDD
 - Padrão AAA para Testes
 - Notification Pattern
 - Command Handler Pattern

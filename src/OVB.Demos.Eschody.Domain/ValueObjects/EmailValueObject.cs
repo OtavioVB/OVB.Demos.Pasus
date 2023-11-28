@@ -46,7 +46,7 @@ public readonly struct EmailValueObject
                     code: "ESC06",
                     message: $"O email precisa conter pelo menos {EmailMinLength} caracteres."));
 
-        if (Regex.IsMatch(email, "^[a-z0-9.-]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$") == false)
+        if (!Regex.IsMatch(email, "^[a-z0-9.-]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$"))
             notifications.Add(
                 item: Notification.BuildErrorfullNotification(
                     code: "ESC07",

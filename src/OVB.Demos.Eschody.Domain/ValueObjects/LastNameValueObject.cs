@@ -48,7 +48,7 @@ public readonly struct LastNameValueObject
         var cultureInfo = CultureInfo.GetCultureInfo("pt-BR");
         var lastNameTitleCase = cultureInfo.TextInfo.ToTitleCase(lastName);
 
-        if (notifications.Count() > 0)
+        if (notifications.Count > 0)
         {
             return new LastNameValueObject(
                 isValid: false,

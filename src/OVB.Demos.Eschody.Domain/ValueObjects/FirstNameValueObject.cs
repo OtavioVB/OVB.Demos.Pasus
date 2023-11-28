@@ -48,7 +48,7 @@ public readonly struct FirstNameValueObject
         var cultureInfo = CultureInfo.GetCultureInfo("pt-BR");
         var firstNameTitleCase = cultureInfo.TextInfo.ToTitleCase(firstName);
 
-        if (notifications.Count() > 0)
+        if (notifications.Count > 0)
         {
             return new FirstNameValueObject(
                 isValid: false,

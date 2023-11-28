@@ -1,6 +1,8 @@
 ﻿using OVB.Demos.Eschody.Libraries.NotificationContext;
 using OVB.Demos.Eschody.Libraries.ProcessResultContext;
 using OVB.Demos.Eschody.Libraries.ValueObjects.Exceptions;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OVB.Demos.Eschody.Domain.ValueObjects;
@@ -29,9 +31,19 @@ public readonly struct PasswordValueObject
     public const int PasswordMaxLength = 32;
     public const int PasswordMinLength = 6;
 
-    public static PasswordValueObject Build(string password)
+    public static PasswordValueObject Build(string password, bool isEncrypted)
     {
         var notifications = new List<Notification>();
+
+        if (isEncrypted == true)
+        {
+            return new PasswordValueObject(
+                isValid: true,
+                password: password,
+                processResult: ProcessResult<Notification>.BuildSuccessfullProcessResult(
+                    notifications: notifications.ToArray(),
+                    exceptions: null));
+        }
 
         if (password.Length > PasswordMaxLength)
             notifications.Add(
@@ -45,7 +57,7 @@ public readonly struct PasswordValueObject
                     code: "ESC11",
                     message: $"A senha precisa conter pelo menos {PasswordMinLength} caracteres."));
 
-        if (notifications.Count() > 0)
+        if (notifications.Count > 0)
         {
             return new PasswordValueObject(
                 isValid: false,
@@ -57,11 +69,20 @@ public readonly struct PasswordValueObject
         {
             return new PasswordValueObject(
                 isValid: true,
-                password: password,
+                password: EncryptInformation(password),
                 processResult: ProcessResult<Notification>.BuildSuccessfullProcessResult(
                     notifications: notifications.ToArray(),
                     exceptions: null));
         }
+    }
+
+    private static string EncryptInformation(string text)
+    {
+        var encodedValue = Encoding.UTF8.GetBytes(text);
+        var encryptedPassword = SHA256.Create().ComputeHash(encodedValue);
+        var sb = new StringBuilder();
+        foreach (var caracter in encryptedPassword) sb.Append(caracter.ToString("X2"));
+        return sb.ToString();
     }
 
     public string GetPassword()

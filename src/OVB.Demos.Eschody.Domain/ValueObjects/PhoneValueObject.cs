@@ -49,7 +49,7 @@ public readonly struct PhoneValueObject
             }
         }
 
-        if (notifications.Count() > 0)
+        if (notifications.Count > 0)
         {
             return new PhoneValueObject(
                 isValid: false,
