@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OVB.Demos.Eschody.Domain.StudentContext;
+using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.Mappings;
 
 namespace OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ public sealed class DataContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new StudentMapping());
         base.OnModelCreating(modelBuilder);
     }
 }

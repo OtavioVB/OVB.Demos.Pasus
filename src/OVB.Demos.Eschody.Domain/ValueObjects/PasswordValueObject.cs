@@ -35,7 +35,7 @@ public readonly struct PasswordValueObject
     {
         var notifications = new List<Notification>();
 
-        if (isEncrypted == true)
+        if (isEncrypted)
         {
             return new PasswordValueObject(
                 isValid: true,
@@ -79,7 +79,7 @@ public readonly struct PasswordValueObject
     private static string EncryptInformation(string text)
     {
         var encodedValue = Encoding.UTF8.GetBytes(text);
-        var encryptedPassword = SHA256.Create().ComputeHash(encodedValue);
+        var encryptedPassword = SHA256.HashData(encodedValue);
         var sb = new StringBuilder();
         foreach (var caracter in encryptedPassword) sb.Append(caracter.ToString("X2"));
         return sb.ToString();

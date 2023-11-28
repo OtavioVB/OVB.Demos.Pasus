@@ -16,7 +16,7 @@ public sealed class PasswordValueObjectTests
         var passwordValueObject = PasswordValueObject.Build(password, false);
 
         var encodedValue = Encoding.UTF8.GetBytes(password);
-        var encryptedPassword = SHA256.Create().ComputeHash(encodedValue);
+        var encryptedPassword = SHA256.HashData(encodedValue);
         var sb = new StringBuilder();
         foreach (var caracter in encryptedPassword) sb.Append(caracter.ToString("X2"));
 

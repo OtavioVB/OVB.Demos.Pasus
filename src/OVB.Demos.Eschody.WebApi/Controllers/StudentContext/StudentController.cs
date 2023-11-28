@@ -34,7 +34,7 @@ public sealed class StudentController : CustomControllerBase
             sourcePlatform: sourcePlatform,
             executionUser: executionUser,
             requestedAt: DateTime.UtcNow);
-        if (auditableInfo.IsValid == false)
+        if (!auditableInfo.IsValid)
             return StatusCode(
                 statusCode: StatusCodes.Status422UnprocessableEntity,
                 value: GetUnprocessableEntityForInvalidAuditable());
