@@ -23,10 +23,10 @@ public sealed class StudentController : CustomControllerBase
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     [AllowAnonymous]
     public async Task<IActionResult> HttpPostCreateStudentServiceAsync(
-        [FromHeader(Name = "X-Idempotency-Key")] string idempotencyKey,
-        [FromHeader(Name = "X-Correlation-Id")] Guid correlationId,
-        [FromHeader(Name = "X-Source-Platform")] string sourcePlatform,
-        [FromHeader(Name = "X-Execution-User")] string executionUser,
+        [FromHeader(Name = HttpIdempotencyKeyTitle)] string idempotencyKey,
+        [FromHeader(Name = HttpCorrelationIdTitle)] Guid correlationId,
+        [FromHeader(Name = HttpSourcePlatformTitle)] string sourcePlatform,
+        [FromHeader(Name = HttpExecutionUserTitle)] string executionUser,
         CancellationToken cancellationToken)
     {
         var auditableInfo = AuditableInfoValueObject.Build(
@@ -38,6 +38,9 @@ public sealed class StudentController : CustomControllerBase
             return StatusCode(
                 statusCode: StatusCodes.Status422UnprocessableEntity,
                 value: GetUnprocessableEntityForInvalidAuditable());
+
+        AddAuditableInfoAtHeadersResponse(HttpContext.Response, auditableInfo, idempotencyKey);
+
 
         return StatusCode(StatusCodes.Status503ServiceUnavailable, null);
     }

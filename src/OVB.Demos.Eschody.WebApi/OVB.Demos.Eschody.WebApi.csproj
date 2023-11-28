@@ -21,4 +21,8 @@
     <ProjectReference Include="..\OVB.Demos.Eschody.Infrascructure\OVB.Demos.Eschody.Infrascructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\StudentContext\Payloads\" />
+  </ItemGroup>
+
 </Project>
