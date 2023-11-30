@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OVB.Demos.Eschody.Domain.StudentContext;
+using OVB.Demos.Eschody.Domain.StudentContext.DataTransferObject;
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.Mappings;
 
 namespace OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore;

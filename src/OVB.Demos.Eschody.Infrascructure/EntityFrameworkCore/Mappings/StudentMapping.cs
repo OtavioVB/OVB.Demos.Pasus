@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using OVB.Demos.Eschody.Domain.StudentContext;
+using OVB.Demos.Eschody.Domain.StudentContext.DataTransferObject;
 using OVB.Demos.Eschody.Domain.ValueObjects;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
 

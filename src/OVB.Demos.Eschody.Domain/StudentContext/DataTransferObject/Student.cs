@@ -1,7 +1,7 @@
 ﻿using OVB.Demos.Eschody.Libraries.ValueObjects;
 using System.Data;
 
-namespace OVB.Demos.Eschody.Domain.StudentContext;
+namespace OVB.Demos.Eschody.Domain.StudentContext.DataTransferObject;
 
 public sealed record Student
 {
@@ -57,8 +57,8 @@ public sealed record Student
         string phone,
         string password)
     {
-       var student = new Student(
-            id: Guid.NewGuid());
+        var student = new Student(
+             id: Guid.NewGuid());
         student.SetAuditableInfo(auditableInfo);
         student.SetContent(firstName, lastName, email, phone, password);
         return student;

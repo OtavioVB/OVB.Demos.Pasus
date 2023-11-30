@@ -1,4 +1,4 @@
-﻿using OVB.Demos.Eschody.Domain.StudentContext;
+﻿using OVB.Demos.Eschody.Domain.StudentContext.DataTransferObject;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
 
 namespace OVB.Demos.Eschody.UnitTests.Domain.StudentContext.DataTransferObject;
