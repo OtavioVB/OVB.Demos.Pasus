@@ -7,7 +7,7 @@ namespace OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.Repositories;
 
 public sealed class StudentRepository : BaseRepository<Student>, IExtensionStudentRepository
 {
-    public StudentRepository(DbContext dbContext) : base(dbContext)
+    public StudentRepository(DataContext dbContext) : base(dbContext)
     {
     }
 

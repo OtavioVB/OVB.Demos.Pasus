@@ -16,19 +16,26 @@ public partial class Program
         #region Observability CrossCutting Dependencies Configuration
 
         builder.Services.ApplyObservabilityDependenciesConfiguration(
-            applicationName: string.Empty,
-            applicationVersion: string.Empty,
-            applicationId: string.Empty,
-            applicationNamespace: string.Empty,
-            openTelemetryGrpcEndpoint: string.Empty,
-            openTelemetryTimeout: 0);
+            applicationName: builder.Configuration["Application:TenantInfo:Name"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Name\"]"),
+            applicationVersion: builder.Configuration["Application:TenantInfo:Version"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Version\"]"),
+            applicationId: builder.Configuration["Application:TenantInfo:Id"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Id\"]"),
+            applicationNamespace: builder.Configuration["Application:TenantInfo:Namespace"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Namespace\"]"),
+            openTelemetryGrpcEndpoint: builder.Configuration["Application:TenantInfo:Infrascructure:OpenTelemetry:Endpoint"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:OpenTelemetry:Endpoint\"]"),
+            openTelemetryTimeout: Convert.ToInt32(builder.Configuration["Application:TenantInfo:Infrascructure:OpenTelemetry:Timeout"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:OpenTelemetry:Timeout\"]")));
 
         #endregion
 
         #region Infrascructure Dependencies Configuration
 
         builder.Services.ApplyInfrascructureDependenciesConfiguration(
-            connectionString: string.Empty);
+            connectionString: builder.Configuration["Application:TenantInfo:Infrascructure:Database:PostgreeSQL:ConnectionString"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Database:PostgreeSQL:ConnectionString\"]"));
 
         #endregion
 

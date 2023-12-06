@@ -6,10 +6,10 @@ namespace OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.Repositories.Base
 public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity>
     where TEntity : class
 {
-    protected readonly DbContext _dbContext;
+    protected readonly DataContext _dbContext;
 
     protected BaseRepository(
-        DbContext dbContext)
+        DataContext dbContext)
     {
         _dbContext = dbContext;
     }

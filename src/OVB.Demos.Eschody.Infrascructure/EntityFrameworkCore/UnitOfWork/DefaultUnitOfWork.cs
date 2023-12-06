@@ -5,9 +5,9 @@ namespace OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.UnitOfWork;
 
 public sealed class DefaultUnitOfWork : IUnitOfWork
 {
-    private readonly DbContext _dbContext;
+    private readonly DataContext _dbContext;
 
-    public DefaultUnitOfWork(DbContext dbContext)
+    public DefaultUnitOfWork(DataContext dbContext)
     {
         _dbContext = dbContext;
     }
