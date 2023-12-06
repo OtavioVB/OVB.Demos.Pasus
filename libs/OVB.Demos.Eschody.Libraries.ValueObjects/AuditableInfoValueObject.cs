@@ -33,6 +33,11 @@ public readonly struct AuditableInfoValueObject
         RequestedAt = DateTime.MinValue;
     }
 
+    public const string CorrelationIdKey = "X-Correlation-Id";
+    public const string SourcePlatformKey = "X-Source-Platform";
+    public const string ExecutionUserKey = "X-Execution-User";
+    public const string RequestedAtKey = "X-Requested-At";
+
     public const int ExecutionUserMaxLength = 32;
     public const int ExecutionUserMinLength = 5;
 

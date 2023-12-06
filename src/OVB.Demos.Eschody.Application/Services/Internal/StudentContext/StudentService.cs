@@ -61,7 +61,7 @@ public sealed class StudentService : IStudentService
 
         return ProcessResult<Notification, CreateStudentServiceResult>.BuildSuccessfullProcessResult(
             output: CreateStudentServiceResult.BuildFromDomainResult(createStudentDomainResult.Output),
-            notifications: null,
-            exceptions: null);
+            notifications: createStudentDomainResult.Notifications,
+            exceptions: createStudentDomainResult.Exceptions);
     }
 }

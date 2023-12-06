@@ -11,10 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="UseCases\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\libs\OVB.Demos.Eschody.Libraries.NotificationContext\OVB.Demos.Eschody.Libraries.NotificationContext.csproj" />
     <ProjectReference Include="..\..\libs\OVB.Demos.Eschody.Libraries.ProcessResultContext\OVB.Demos.Eschody.Libraries.ProcessResultContext.csproj" />
     <ProjectReference Include="..\..\libs\OVB.Demos.Eschody.Libraries.ValueObjects\OVB.Demos.Eschody.Libraries.ValueObjects.csproj" />
