@@ -25,6 +25,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{4139ADEA-9106-41BD-A603-73D30A023B93}"
 	ProjectSection(SolutionItems) = preProject
 		devops\docker-compose.Local.yaml = devops\docker-compose.Local.yaml
+		Dockerfile = Dockerfile
 		devops\otel-collector-config.yaml = devops\otel-collector-config.yaml
 	EndProjectSection
 EndProject
@@ -43,7 +44,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.IntegrationTests", "tst\OVB.Demos.Eschody.IntegrationTests\OVB.Demos.Eschody.IntegrationTests.csproj", "{4A312D0C-27A7-4C82-89E0-78B48750B85A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Libraries.Observability", "libs\OVB.Demos.Eschody.Libraries.Observability\OVB.Demos.Eschody.Libraries.Observability.csproj", "{9B4CE2E8-4366-457A-B8FD-C5309F2B3795}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries.Observability", "libs\OVB.Demos.Eschody.Libraries.Observability\OVB.Demos.Eschody.Libraries.Observability.csproj", "{9B4CE2E8-4366-457A-B8FD-C5309F2B3795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
