@@ -30,3 +30,6 @@
 - Command Handler Pattern
 - Command Pattern
 - Singleton Pattern
+- Design Orientado ao Domínio (DDD)
+- Serviços de Domínio
+- Abordagem por casos de uso

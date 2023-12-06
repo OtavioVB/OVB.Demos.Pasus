@@ -1,23 +1,20 @@
 version: "3.8"
 
 services:
-  zipkin:
-    image: openzipkin/zipkin
-    container_name: zipkin
-    restart: unless-stopped
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
     ports:
-      - 9411:9411
+      - 17002:16686
     networks:
       - ovb-demos-eschody
-
+  
   otel-collector:
-    image: otel/opentelemetry-collector:latest
+    image: otel/opentelemetry-collector:0.68.0
     container_name: otel-collector
     command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
-    ports:
-      - "4317:4317"  
     depends_on:
       - jaeger
     links:
@@ -32,8 +29,7 @@ services:
       RABBITMQ_DEFAULT_USER: otavio.carmanini@eschody.com.br
       RABBITMQ_DEFAULT_PASS: 123456
     ports:
-      - 5672:5672
-      - 15672:15672
+      - 17000:15672
     restart: always
     networks:
       - ovb-demos-eschody
@@ -44,8 +40,6 @@ services:
     environment:
       POSTGRES_USER: otavio.carmanini@eschody.com.br
       POSTGRES_PASSWORD: 123456
-    ports:
-      - "5432:5432"
     restart: always
     networks:
       - ovb-demos-eschody
@@ -58,12 +52,24 @@ services:
       PGADMIN_DEFAULT_EMAIL: "otavio.carmanini@eschody.com.br"
       PGADMIN_DEFAULT_PASSWORD: "123456"
     ports:
-      - "8080:80"
+      - 17001:80
     restart: always
     links:
       - postgres
     depends_on:
       - postgres
+    networks:
+      - ovb-demos-eschody
+
+  eschody-gatway:
+    build: 
+      context: ../.
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+    environment: 
+      - ASPNETCORE_ENVIRONMENT=Development
+    tty: true
     networks:
       - ovb-demos-eschody
 

@@ -41,7 +41,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.Libraries.NotificationContext", "libs\OVB.Demos.Eschody.Libraries.NotificationContext\OVB.Demos.Eschody.Libraries.NotificationContext.csproj", "{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.IntegrationTests", "tst\OVB.Demos.Eschody.IntegrationTests\OVB.Demos.Eschody.IntegrationTests.csproj", "{4A312D0C-27A7-4C82-89E0-78B48750B85A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OVB.Demos.Eschody.IntegrationTests", "tst\OVB.Demos.Eschody.IntegrationTests\OVB.Demos.Eschody.IntegrationTests.csproj", "{4A312D0C-27A7-4C82-89E0-78B48750B85A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OVB.Demos.Eschody.Libraries.Observability", "libs\OVB.Demos.Eschody.Libraries.Observability\OVB.Demos.Eschody.Libraries.Observability.csproj", "{9B4CE2E8-4366-457A-B8FD-C5309F2B3795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{4A312D0C-27A7-4C82-89E0-78B48750B85A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A312D0C-27A7-4C82-89E0-78B48750B85A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A312D0C-27A7-4C82-89E0-78B48750B85A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B4CE2E8-4366-457A-B8FD-C5309F2B3795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B4CE2E8-4366-457A-B8FD-C5309F2B3795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B4CE2E8-4366-457A-B8FD-C5309F2B3795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B4CE2E8-4366-457A-B8FD-C5309F2B3795}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{3E0A5C40-BD36-4242-8DB6-D9B7C2B65EBB} = {06F64783-DE99-43E2-A135-54B496FE5161}
 		{0A0715DC-21F8-4D58-88B9-FFA3FAFD340A} = {06F64783-DE99-43E2-A135-54B496FE5161}
 		{4A312D0C-27A7-4C82-89E0-78B48750B85A} = {51AD6B61-24C5-43DC-8668-CACDC16A2B9F}
+		{9B4CE2E8-4366-457A-B8FD-C5309F2B3795} = {06F64783-DE99-43E2-A135-54B496FE5161}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B9783B5-3F49-4148-B4E4-4A3D045514D2}

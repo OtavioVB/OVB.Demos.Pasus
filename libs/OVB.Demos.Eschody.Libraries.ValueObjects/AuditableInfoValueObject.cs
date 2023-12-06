@@ -37,6 +37,7 @@ public readonly struct AuditableInfoValueObject
     public const string SourcePlatformKey = "X-Source-Platform";
     public const string ExecutionUserKey = "X-Execution-User";
     public const string RequestedAtKey = "X-Requested-At";
+    public const string IdempotencyKey = "X-Idempotency-Key";
 
     public const int ExecutionUserMaxLength = 32;
     public const int ExecutionUserMinLength = 5;

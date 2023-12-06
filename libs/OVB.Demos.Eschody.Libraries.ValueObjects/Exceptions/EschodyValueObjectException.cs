@@ -9,4 +9,7 @@ public sealed class EschodyValueObjectException : Exception
         if (isValid == false)
             throw new EschodyValueObjectException("O recurso a ser obtido não é valido.");
     }
+
+    public static EschodyValueObjectException ExceptionFromActivityNull
+        = new EschodyValueObjectException("The activity is null for tracing.");
 }

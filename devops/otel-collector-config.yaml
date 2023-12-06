@@ -5,7 +5,7 @@ receivers:
 
 exporters:
   zipkin:
-    endpoint: "http://zipkin:9411/api/v2/spans"
+    endpoint: jaeger:14250
     tls:
       insecure: true
 
@@ -17,4 +17,4 @@ service:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [zipkin]
+      exporters: [jaeger]
