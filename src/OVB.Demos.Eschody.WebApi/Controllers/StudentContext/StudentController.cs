@@ -79,7 +79,7 @@ public sealed class StudentController : CustomControllerBase
             auditableInfo: auditableInfo,
             cancellationToken: cancellationToken);
 
-        if (useCaseResult.IsSuccess == true)
+        if (useCaseResult.IsSuccess)
         {
             var memoryStream = new MemoryStream();
             await JsonSerializer.SerializeAsync(

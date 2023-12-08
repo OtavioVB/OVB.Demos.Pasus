@@ -62,7 +62,7 @@ public abstract class StudentBase : ICreateStudentDomainFunction
                 auditableInfo: input.AuditableInfo));
     }
 
-    protected Guid GenerateStudentId()
+    protected static Guid GenerateStudentId()
         => Guid.NewGuid();
 
     protected virtual ProcessResult<Notification> ValidateThatStudentDoesNotExistsYet(bool studentExists, int? index = null)

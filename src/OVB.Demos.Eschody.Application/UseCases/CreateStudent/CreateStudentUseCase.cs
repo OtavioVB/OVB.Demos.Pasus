@@ -39,13 +39,13 @@ public sealed class CreateStudentUseCase : IUseCase<CreateStudentUseCaseInput, C
                         typeStudent: input.TypeStudent),
                     cancellationToken: cancellationToken);
 
-                if (createStudentServiceResult.IsError == true)
+                if (createStudentServiceResult.IsError)
                     return (false, ProcessResult<Notification, CreateStudentUseCaseResult>.BuildErrorfullProcessResult(
                         output: default,
                         notifications: createStudentServiceResult.Notifications,
                         exceptions: createStudentServiceResult.Exceptions));
 
-                if (createStudentServiceResult.IsPartial == true)
+                if (createStudentServiceResult.IsPartial)
                     throw new NotImplementedException();
 
                 return (true, ProcessResult<Notification, CreateStudentUseCaseResult>.BuildSuccessfullProcessResult(
