@@ -4,10 +4,11 @@
 - .NET 8/ASP. NET Core 8
 - Entity Framework Core 8
 - Docker/Docker-Compose
-- SonarCloud/Open Cover
+- SonarCloud/SonarQube
 - Github Actions/Workflows
 - PostgreeSQL/PostgreeAdmin
-- ZipKin/OpenTelemetry
+- Jaeger/OpenTelemetry
+- Redis/Redis-Insight
 - RabbitMq
 
 ## Conceitos Utilizados
@@ -33,3 +34,6 @@
 - Design Orientado ao Domínio (DDD)
 - Serviços de Domínio
 - Abordagem por casos de uso
+- Auditabilidade
+- Idempotência
+- Cache Distríbuido
