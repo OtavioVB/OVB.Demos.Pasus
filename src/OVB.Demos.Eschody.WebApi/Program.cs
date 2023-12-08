@@ -35,7 +35,10 @@ public partial class Program
 
         builder.Services.ApplyInfrascructureDependenciesConfiguration(
             connectionString: builder.Configuration["Application:TenantInfo:Infrascructure:Database:PostgreeSQL:ConnectionString"]
-                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Database:PostgreeSQL:ConnectionString\"]"));
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Database:PostgreeSQL:ConnectionString\"]"),
+            redisConnectionString: builder.Configuration["Application:TenantInfo:Infrascructure:Database:Redis:ConnectionString"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Database:Redis:ConnectionString\"]"),
+            applicationName: builder.Configuration["Application:TenantInfo:Name"]!);
 
         #endregion
 

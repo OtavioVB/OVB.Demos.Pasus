@@ -75,7 +75,7 @@ services:
     image: redislabs/redisinsight
     container_name: redis-insight
     ports:
-      - 8001:8001
+      - 17003:8001
     restart: always
     depends_on:
       - redis

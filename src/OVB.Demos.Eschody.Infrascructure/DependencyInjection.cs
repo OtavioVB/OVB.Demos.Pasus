@@ -9,6 +9,7 @@ using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.UnitOfWork;
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.UnitOfWork.Interfaces;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
+using StackExchange.Redis;
 
 namespace OVB.Demos.Eschody.Infrascructure;
 

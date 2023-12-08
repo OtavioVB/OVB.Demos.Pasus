@@ -6,10 +6,13 @@ using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Outputs;
 using OVB.Demos.Eschody.Application.UseCases.Interfaces;
 using OVB.Demos.Eschody.Domain.StudentContext.ENUMs;
 using OVB.Demos.Eschody.Domain.ValueObjects;
+using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
+using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Models;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
 using OVB.Demos.Eschody.WebApi.Controllers.Base;
 using OVB.Demos.Eschody.WebApi.Controllers.StudentContext.Payloads;
 using System.Net.Mime;
+using System.Text.Json;
 
 namespace OVB.Demos.Eschody.WebApi.Controllers.StudentContext;
 
@@ -27,6 +30,7 @@ public sealed class StudentController : CustomControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> HttpPostCreateStudentServiceAsync(
         [FromServices] IUseCase<CreateStudentUseCaseInput, CreateStudentUseCaseResult> useCase,
+        [FromServices] ICacheRepository cacheRepository,
         [FromHeader(Name = AuditableInfoValueObject.IdempotencyKey)] string idempotencyKey,
         [FromHeader(Name = AuditableInfoValueObject.CorrelationIdKey)] Guid correlationId,
         [FromHeader(Name = AuditableInfoValueObject.SourcePlatformKey)] string sourcePlatform,
@@ -34,6 +38,20 @@ public sealed class StudentController : CustomControllerBase
         [FromBody] CreateStudentPayloadInput input,
         CancellationToken cancellationToken)
     {
+        var cache = await cacheRepository.GetCacheAsync(
+            key: $"{nameof(HttpPostCreateStudentServiceAsync)}.{idempotencyKey}",
+            cancellationToken: cancellationToken);
+        if (cache is not null)
+        {
+            var memoryStream = new MemoryStream(cache);
+            var cacheModel = await JsonSerializer.DeserializeAsync<CacheRequestModel>(
+                utf8Json: memoryStream,
+                cancellationToken: cancellationToken);
+            return StatusCode(
+                statusCode: cacheModel!.StatusCode,
+                value: cacheModel.Response);
+        }
+
         var auditableInfo = AuditableInfoValueObject.Build(
             correlationId: correlationId,
             sourcePlatform: sourcePlatform,
@@ -62,9 +80,25 @@ public sealed class StudentController : CustomControllerBase
             cancellationToken: cancellationToken);
 
         if (useCaseResult.IsSuccess == true)
+        {
+            var memoryStream = new MemoryStream();
+            await JsonSerializer.SerializeAsync(
+                    utf8Json: memoryStream,
+                    value: new CacheRequestModel(
+                        statusCode: StatusCodes.Status201Created,
+                        response: useCaseResult.Output),
+                    cancellationToken: cancellationToken);
+            await cacheRepository.SetCacheAsync(
+                key: $"{nameof(HttpPostCreateStudentServiceAsync)}.{idempotencyKey}",
+                value: memoryStream.ToArray(),
+                expirationSeconds: 86400,
+                memoryExpirationSeconds: 300,
+                cancellationToken: cancellationToken);
+
             return StatusCode(
                 statusCode: StatusCodes.Status201Created,
                 value: useCaseResult.Output);
+        }
 
         if (useCaseResult.IsPartial)
             return StatusCode(StatusCodes.Status503ServiceUnavailable, null);
