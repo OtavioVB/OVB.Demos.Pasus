@@ -18,7 +18,6 @@ using System.Text.Json;
 namespace OVB.Demos.Eschody.WebApi.Controllers.StudentContext;
 
 [Route("api/v1/backoffice/student")]
-[ApiController]
 public sealed class StudentController : CustomControllerBase
 {
     public StudentController(
