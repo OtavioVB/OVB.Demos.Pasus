@@ -84,6 +84,24 @@ services:
     networks:
       - ovb-demos-eschody
 
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    hostname: grafana
+    environment:
+      -  GF_SECURITY_ADMIN_PASSWORD=admin
+    restart: unless-stopped
+    ports:
+      - 17004:3000
+    depends_on:
+      - otel-collector
+      - jaeger
+    links:
+      - otel-collector
+      - jaeger
+    networks:
+      - ovb-demos-eschody
+
   eschody-gateway:
     container_name: eschody-gateway
     build: 

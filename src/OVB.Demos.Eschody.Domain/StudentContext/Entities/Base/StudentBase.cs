@@ -4,6 +4,7 @@ using OVB.Demos.Eschody.Domain.StudentContext.Functions.CreateStudent.Interfaces
 using OVB.Demos.Eschody.Domain.StudentContext.Functions.CreateStudent.Outputs;
 using OVB.Demos.Eschody.Libraries.NotificationContext;
 using OVB.Demos.Eschody.Libraries.ProcessResultContext;
+using OVB.Demos.Eschody.Libraries.ValueObjects;
 
 namespace OVB.Demos.Eschody.Domain.StudentContext.Entities.Base;
 
@@ -18,7 +19,7 @@ public abstract class StudentBase : ICreateStudentDomainFunction
 
     public async Task<ProcessResult<Notification, CreateStudentDomainFunctionResult>> CreateStudentDomainFunctionAsync(
         CreateStudentDomainFunctionInput input,
-        Func<string, CancellationToken, Task<bool>> verifyStudentExistsByEmail,
+        Func<string, AuditableInfoValueObject, CancellationToken, Task<bool>> verifyStudentExistsByEmail,
         CancellationToken cancellationToken)
     {
         var initialValidation = ProcessResult<Notification, CreateStudentDomainFunctionResult>.BuildFromAnotherProcessResult(
@@ -38,7 +39,8 @@ public abstract class StudentBase : ICreateStudentDomainFunction
 
         var studentExistsByEmail = await verifyStudentExistsByEmail(
             arg1: input.Email.GetEmail(),
-            arg2: cancellationToken);
+            arg2: input.AuditableInfo,
+            arg3: cancellationToken);
 
         var businessValidations = ProcessResult<Notification, CreateStudentDomainFunctionResult>.BuildFromAnotherProcessResult(
             output: default,

@@ -56,6 +56,7 @@ public sealed class StudentService : IStudentService
 
         await _baseStudentRepository.AddAsync(
             entity: createStudentDomainResult.Output.Adapt(),
+            auditableInfo: input.AuditableInfo,
             cancellationToken: cancellationToken);
         await _unitOfWork.ApplyDatabaseTransactionAsync(cancellationToken);
 

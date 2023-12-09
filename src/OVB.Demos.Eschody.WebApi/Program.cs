@@ -2,6 +2,7 @@
 using OVB.Demos.Eschody.Application;
 using OVB.Demos.Eschody.Infrascructure;
 using OVB.Demos.Eschody.Libraries.Observability;
+using System.Text.Json.Serialization;
 
 namespace OVB.Demos.Eschody.WebApi;
 
@@ -48,7 +49,13 @@ public partial class Program
 
         #endregion
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
         var app = builder.Build();
 

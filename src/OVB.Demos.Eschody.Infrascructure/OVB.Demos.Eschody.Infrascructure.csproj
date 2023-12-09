@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\libs\OVB.Demos.Eschody.Libraries.Observability\OVB.Demos.Eschody.Libraries.Observability.csproj" />
     <ProjectReference Include="..\OVB.Demos.Eschody.Domain\OVB.Demos.Eschody.Domain.csproj" />
   </ItemGroup>
 
