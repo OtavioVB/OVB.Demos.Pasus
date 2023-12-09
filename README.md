@@ -9,24 +9,26 @@
 - PostgreeSQL/PostgreeAdmin
 - Jaeger/OpenTelemetry
 - Redis/Redis-Insight
+- Readme.io/Docs
+- Grafana/Prometheus
+- GitHub/GitHub Actions
 - RabbitMq
 
 ## Conceitos Utilizados
-- Análise Estática de Código
-- Cobertura Total de Testes
-- Imutabilidade
-- Objetos de Transferência de Dados
-- Arquitetura Limpa
-- Arquitetura em Camadas
-- Idempotência
-- Auditabilidade Processamento de Requisições
-- Observabilidade
-- Traces e Métricas
-- Logs de Serviços
-- Testes de Unidade
-- Testes de Integração
-- Padrão BDD
-- Padrão AAA para Testes
+- MultiTenant Approach
+- Documentation with Readme.io
+- Static Code Analysis
+- Imutability
+- Data Transfer Object
+- Archictecture in Layers
+- Clean Archictecture
+- Observability
+- Traces and Metrics
+- Service Logs
+- Unit Tests
+- Integration Tests
+- BDD Pattern
+- AAA Pattern
 - Notification Pattern
 - Command Handler Pattern
 - Command Pattern
@@ -34,9 +36,22 @@
 - Factory Pattern
 - Adapter Pattern
 - Builder Pattern
-- Design Orientado ao Domínio (DDD)
-- Serviços de Domínio
-- Abordagem por casos de uso
-- Auditabilidade
-- Idempotência
-- Cache Distríbuido
+- Unit Of Work Pattern
+- SOLID Principles
+- Database Transactions
+- Dependency Injection
+- Async Operations
+- Continuos Deployment/Continuos Integration
+- Rich Domain Models
+- Domain-Driven Design (DDD)
+- Domain Services
+- Use Cases Approach
+- Auditability
+- Idempotency
+- Protobuf Binary Serialization
+- Messenger
+- Eventual Consistency
+- Api Versioning
+- Health Checks
+- Command Query Responsability Segregation (CQRS)
+- Distributed Cache

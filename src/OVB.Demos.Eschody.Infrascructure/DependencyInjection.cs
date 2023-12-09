@@ -7,6 +7,7 @@ using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.Repositories.Base.Int
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.Repositories.Extensions;
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.UnitOfWork;
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.UnitOfWork.Interfaces;
+using OVB.Demos.Eschody.Infrascructure.RabbitMq;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
 using StackExchange.Redis;
@@ -19,8 +20,26 @@ public static class DependencyInjection
         this IServiceCollection serviceCollection, 
         string connectionString,
         string redisConnectionString,
-        string applicationName)
+        string applicationName,
+        string rabbitMqClientProviderName,
+        string rabbitMqHostName,
+        string rabbitMqUsername,
+        string rabbitVirtualHost,
+        string rabbitMqPassword,
+        int rabbitMqPort)
     {
+        #region Rabbit Mq Messenger Eventual Consistency Configuration
+
+        serviceCollection.ApplyRabbitMqMessengerDependenciesConfiguration(
+            rabbitMqClientProviderName: rabbitMqClientProviderName,
+            rabbitMqHostName: rabbitMqHostName,
+            rabbitMqUsername: rabbitMqUsername,
+            rabbitMqPort: rabbitMqPort,
+            rabbitMqVirtualHost: rabbitVirtualHost,
+            rabbitMqPassword: rabbitMqPassword);
+
+        #endregion
+
         #region Redis Distributed Cache Configuration
 
         serviceCollection.AddStackExchangeRedisCache(p =>
