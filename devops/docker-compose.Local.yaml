@@ -9,6 +9,16 @@ services:
     networks:
       - ovb-demos-eschody
   
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+        - 17005:9090
+    volumes:
+        - ./prometheus-config.yaml:/etc/prometheus/prometheus.yml
+    networks:
+      - ovb-demos-eschody
+
   otel-collector:
     image: otel/opentelemetry-collector:0.68.0
     container_name: otel-collector
