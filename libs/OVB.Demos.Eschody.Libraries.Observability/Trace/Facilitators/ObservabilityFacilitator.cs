@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OVB.Demos.Eschody.Libraries.Observability.Trace.Facilitators;
 
-public static class TraceSpan
+public static class ObservabilityFacilitator
 {
     public static string EndpointKey = "Endpoint";
     public static string HttpMethodKey = "HttpMethod";

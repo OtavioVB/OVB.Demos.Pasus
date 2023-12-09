@@ -6,6 +6,7 @@ using OVB.Demos.Eschody.Application.UseCases.Interfaces;
 using OVB.Demos.Eschody.Domain.StudentContext.ENUMs;
 using OVB.Demos.Eschody.Domain.ValueObjects;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
+using OVB.Demos.Eschody.Libraries.Observability.Metric.Interfaces;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Facilitators;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Interfaces;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
@@ -22,7 +23,8 @@ public sealed class StudentController : CustomControllerBase
 {
     public StudentController(
         ITraceManager traceManager,
-        ICacheRepository cacheRepository) : base(traceManager, cacheRepository){}
+        ICacheRepository cacheRepository,
+        IMetricManager metricManager) : base(traceManager, cacheRepository, metricManager){}
 
 
     [HttpPost]
@@ -70,6 +72,22 @@ public sealed class StudentController : CustomControllerBase
                 HttpContext.Response.Headers.Append(AuditableInfoValueObject.ExecutionUserKey, inputAuditableInfo.GetExecutionUser());
                 HttpContext.Response.Headers.Append(AuditableInfoValueObject.IdempotencyHeaderKey, inputAuditableInfo.GetIdempotencyKey());
 
+                _metricManager.CreateCounterIfNotExists(
+                    counterName: nameof(HttpPostCreateStudentServiceAsync));
+                _metricManager.IncrementCounter(
+                    counterName: nameof(HttpPostCreateStudentServiceAsync),
+                    auditableInfo: inputAuditableInfo,
+                    keyValuePairs: [
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.CorrelationIdKey,
+                            value: (object?)inputAuditableInfo.GetCorrelationId().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.SourcePlatformKey,
+                            value: (object?)inputAuditableInfo.GetSourcePlatform().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.ExecutionUserKey,
+                            value: (object?)inputAuditableInfo.GetExecutionUser().ToString())
+                    ]);
 
                 var cache = await GetCacheFromIdempotencyKeyAsync(
                     actionCacheKey: actionCacheKey,
@@ -82,37 +100,37 @@ public sealed class StudentController : CustomControllerBase
 
                     inputActivity.AppendSpanTag(
                         KeyValuePair.Create(
-                            key: TraceSpan.HttpMethodKey,
+                            key: ObservabilityFacilitator.HttpMethodKey,
                             value: "HTTP POST"),
                         KeyValuePair.Create(
-                            key: TraceSpan.EndpointKey,
+                            key: ObservabilityFacilitator.EndpointKey,
                             value: "api/v1/backoffice/student/create"),
                         KeyValuePair.Create(
-                            key: TraceSpan.CorrelationIdKey,
+                            key: ObservabilityFacilitator.CorrelationIdKey,
                             value: inputAuditableInfo.GetCorrelationId().ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.ExecutionUserKey,
+                            key: ObservabilityFacilitator.ExecutionUserKey,
                             value: inputAuditableInfo.GetExecutionUser()),
                         KeyValuePair.Create(
-                            key: TraceSpan.SourcePlatformKey,
+                            key: ObservabilityFacilitator.SourcePlatformKey,
                             value: inputAuditableInfo.GetSourcePlatform()),
                         KeyValuePair.Create(
-                            key: TraceSpan.IdempotencyKey,
+                            key: ObservabilityFacilitator.IdempotencyKey,
                             value: inputAuditableInfo.GetIdempotencyKey()),
                         KeyValuePair.Create(
-                            key: TraceSpan.StatusCodeKey,
+                            key: ObservabilityFacilitator.StatusCodeKey,
                             value: statusCode.ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.HasUsedIdempotencyCache,
+                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
                             value: hasUsedIdempotencyCache.ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.RemoteHostKey,
+                            key: ObservabilityFacilitator.RemoteHostKey,
                             value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.RemoteAddrKey,
+                            key: ObservabilityFacilitator.RemoteAddrKey,
                             value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.HttpForwardedForKey,
+                            key: ObservabilityFacilitator.HttpForwardedForKey,
                             value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
 
                     return StatusCode(
@@ -143,40 +161,40 @@ public sealed class StudentController : CustomControllerBase
 
                     inputActivity.AppendSpanTag(
                         KeyValuePair.Create(
-                            key: TraceSpan.HttpMethodKey,
+                            key: ObservabilityFacilitator.HttpMethodKey,
                             value: "HTTP POST"),
                         KeyValuePair.Create(
-                            key: TraceSpan.EndpointKey,
+                            key: ObservabilityFacilitator.EndpointKey,
                             value: "api/v1/backoffice/student/create"),
                         KeyValuePair.Create(
-                            key: TraceSpan.CorrelationIdKey,
+                            key: ObservabilityFacilitator.CorrelationIdKey,
                             value: inputAuditableInfo.GetCorrelationId().ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.ExecutionUserKey,
+                            key: ObservabilityFacilitator.ExecutionUserKey,
                             value: inputAuditableInfo.GetExecutionUser()),
                         KeyValuePair.Create(
-                            key: TraceSpan.SourcePlatformKey,
+                            key: ObservabilityFacilitator.SourcePlatformKey,
                             value: inputAuditableInfo.GetSourcePlatform()),
                         KeyValuePair.Create(
-                            key: TraceSpan.IdempotencyKey,
+                            key: ObservabilityFacilitator.IdempotencyKey,
                             value: inputAuditableInfo.GetIdempotencyKey()),
                         KeyValuePair.Create(
-                            key: TraceSpan.StatusCodeKey,
+                            key: ObservabilityFacilitator.StatusCodeKey,
                             value: statusCode.ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.HasUsedIdempotencyCache,
+                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
                             value: hasUsedIdempotencyCache.ToString()),
                         KeyValuePair.Create(
                             key: nameof(CreateStudentUseCaseResult.StudentId),
                             value: useCaseResult.Output.StudentId.ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.RemoteHostKey,
+                            key: ObservabilityFacilitator.RemoteHostKey,
                             value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.RemoteAddrKey,
+                            key: ObservabilityFacilitator.RemoteAddrKey,
                             value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.HttpForwardedForKey,
+                            key: ObservabilityFacilitator.HttpForwardedForKey,
                             value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
 
                     return StatusCode(
@@ -195,37 +213,37 @@ public sealed class StudentController : CustomControllerBase
 
                     inputActivity.AppendSpanTag(
                         KeyValuePair.Create(
-                            key: TraceSpan.HttpMethodKey,
+                            key: ObservabilityFacilitator.HttpMethodKey,
                             value: "HTTP POST"),
                         KeyValuePair.Create(
-                            key: TraceSpan.EndpointKey,
+                            key: ObservabilityFacilitator.EndpointKey,
                             value: "api/v1/backoffice/student/create"),
                         KeyValuePair.Create(
-                            key: TraceSpan.CorrelationIdKey,
+                            key: ObservabilityFacilitator.CorrelationIdKey,
                             value: inputAuditableInfo.GetCorrelationId().ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.ExecutionUserKey,
+                            key: ObservabilityFacilitator.ExecutionUserKey,
                             value: inputAuditableInfo.GetExecutionUser()),
                         KeyValuePair.Create(
-                            key: TraceSpan.SourcePlatformKey,
+                            key: ObservabilityFacilitator.SourcePlatformKey,
                             value: inputAuditableInfo.GetSourcePlatform()),
                         KeyValuePair.Create(
-                            key: TraceSpan.IdempotencyKey,
+                            key: ObservabilityFacilitator.IdempotencyKey,
                             value: inputAuditableInfo.GetIdempotencyKey()),
                         KeyValuePair.Create(
-                            key: TraceSpan.StatusCodeKey,
+                            key: ObservabilityFacilitator.StatusCodeKey,
                             value: statusCode.ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.HasUsedIdempotencyCache,
+                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
                             value: hasUsedIdempotencyCache.ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.RemoteHostKey,
+                            key: ObservabilityFacilitator.RemoteHostKey,
                             value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.RemoteAddrKey,
+                            key: ObservabilityFacilitator.RemoteAddrKey,
                             value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
                         KeyValuePair.Create(
-                            key: TraceSpan.HttpForwardedForKey,
+                            key: ObservabilityFacilitator.HttpForwardedForKey,
                             value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
 
                     return StatusCode(
@@ -235,37 +253,37 @@ public sealed class StudentController : CustomControllerBase
 
                 inputActivity.AppendSpanTag(
                     KeyValuePair.Create(
-                        key: TraceSpan.HttpMethodKey,
+                        key: ObservabilityFacilitator.HttpMethodKey,
                         value: "HTTP POST"),
                     KeyValuePair.Create(
-                        key: TraceSpan.EndpointKey,
+                        key: ObservabilityFacilitator.EndpointKey,
                         value: "api/v1/backoffice/student/create"),
                     KeyValuePair.Create(
-                        key: TraceSpan.CorrelationIdKey,
+                        key: ObservabilityFacilitator.CorrelationIdKey,
                         value: inputAuditableInfo.GetCorrelationId().ToString()),
                     KeyValuePair.Create(
-                        key: TraceSpan.ExecutionUserKey,
+                        key: ObservabilityFacilitator.ExecutionUserKey,
                         value: inputAuditableInfo.GetExecutionUser()),
                     KeyValuePair.Create(
-                        key: TraceSpan.SourcePlatformKey,
+                        key: ObservabilityFacilitator.SourcePlatformKey,
                         value: inputAuditableInfo.GetSourcePlatform()),
                     KeyValuePair.Create(
-                        key: TraceSpan.IdempotencyKey,
+                        key: ObservabilityFacilitator.IdempotencyKey,
                         value: inputAuditableInfo.GetIdempotencyKey()),
                     KeyValuePair.Create(
-                        key: TraceSpan.StatusCodeKey,
+                        key: ObservabilityFacilitator.StatusCodeKey,
                         value: statusCode.ToString()),
                     KeyValuePair.Create(
-                        key: TraceSpan.HasUsedIdempotencyCache,
+                        key: ObservabilityFacilitator.HasUsedIdempotencyCache,
                         value: hasUsedIdempotencyCache.ToString()),
                     KeyValuePair.Create(
-                        key: TraceSpan.RemoteHostKey,
+                        key: ObservabilityFacilitator.RemoteHostKey,
                         value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
                     KeyValuePair.Create(
-                        key: TraceSpan.RemoteAddrKey,
+                        key: ObservabilityFacilitator.RemoteAddrKey,
                         value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
                     KeyValuePair.Create(
-                        key: TraceSpan.HttpForwardedForKey,
+                        key: ObservabilityFacilitator.HttpForwardedForKey,
                         value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
 
                 statusCode = StatusCodes.Status400BadRequest;

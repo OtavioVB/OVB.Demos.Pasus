@@ -8,6 +8,8 @@ exporters:
     endpoint: jaeger:14250
     tls:
       insecure: true
+  prometheus:
+    endpoint: "0.0.0.0:8889"
 
 processors:
   batch:
@@ -18,3 +20,7 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [jaeger]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [prometheus]

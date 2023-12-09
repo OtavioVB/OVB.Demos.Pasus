@@ -2,6 +2,7 @@
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Models;
+using OVB.Demos.Eschody.Libraries.Observability.Metric.Interfaces;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Facilitators;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Interfaces;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
@@ -15,13 +16,16 @@ public abstract class CustomControllerBase : ControllerBase
 {
     protected readonly ITraceManager _traceManager;
     protected readonly ICacheRepository _cacheRepository;
+    protected readonly IMetricManager _metricManager;
 
     protected CustomControllerBase(
         ITraceManager traceManager,
-        ICacheRepository cacheRepository)
+        ICacheRepository cacheRepository,
+        IMetricManager metricManager)
     {
         _traceManager = traceManager;
         _cacheRepository = cacheRepository;
+        _metricManager = metricManager;
     }
 
     public async Task SetCacheFromIdempotencyKeyAsync(string actionCacheKey, int statusCode, object? content, AuditableInfoValueObject auditableInfo,

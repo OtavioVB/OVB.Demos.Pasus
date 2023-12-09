@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "devops", "devops", "{4139AD
 		devops\docker-compose.Local.yaml = devops\docker-compose.Local.yaml
 		Dockerfile = Dockerfile
 		devops\otel-collector-config.yaml = devops\otel-collector-config.yaml
+		devops\prometheus-config.yaml = devops\prometheus-config.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{82EE1549-CB36-4A0C-BCE3-D13C6F6DB931}"

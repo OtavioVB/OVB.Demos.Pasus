@@ -37,13 +37,13 @@ public sealed class TraceManager : ITraceManager
                 activity.AddTag(keyValuePair.Key, keyValuePair.Value);
 
         activity.AddTag(
-            key: TraceSpan.CorrelationIdKey,
+            key: ObservabilityFacilitator.CorrelationIdKey,
             value: auditableInfo.GetCorrelationId().ToString());
         activity.AddTag(
-            key: TraceSpan.SourcePlatformKey,
+            key: ObservabilityFacilitator.SourcePlatformKey,
             value: auditableInfo.GetSourcePlatform().ToString());
         activity.AddTag(
-            key: TraceSpan.ExecutionUserKey,
+            key: ObservabilityFacilitator.ExecutionUserKey,
             value: auditableInfo.GetExecutionUser().ToString());
 
         try
@@ -80,13 +80,13 @@ public sealed class TraceManager : ITraceManager
         activity.Start();
 
         activity.AddTag(
-            key: TraceSpan.CorrelationIdKey,
+            key: ObservabilityFacilitator.CorrelationIdKey,
             value: auditableInfo.GetCorrelationId().ToString());
         activity.AddTag(
-            key: TraceSpan.SourcePlatformKey,
+            key: ObservabilityFacilitator.SourcePlatformKey,
             value: auditableInfo.GetSourcePlatform().ToString());
         activity.AddTag(
-            key: TraceSpan.ExecutionUserKey,
+            key: ObservabilityFacilitator.ExecutionUserKey,
             value: auditableInfo.GetExecutionUser().ToString());
 
         if (keyValuePairs is not null)
@@ -131,13 +131,13 @@ public sealed class TraceManager : ITraceManager
                 activity.AddTag(keyValuePair.Key, keyValuePair.Value);
 
         activity.AddTag(
-            key: TraceSpan.CorrelationIdKey,
+            key: ObservabilityFacilitator.CorrelationIdKey,
             value: auditableInfo.GetCorrelationId().ToString());
         activity.AddTag(
-            key: TraceSpan.SourcePlatformKey,
+            key: ObservabilityFacilitator.SourcePlatformKey,
             value: auditableInfo.GetSourcePlatform().ToString());
         activity.AddTag(
-            key: TraceSpan.ExecutionUserKey,
+            key: ObservabilityFacilitator.ExecutionUserKey,
             value: auditableInfo.GetExecutionUser().ToString());
 
         try
@@ -177,13 +177,13 @@ public sealed class TraceManager : ITraceManager
                 activity.AddTag(keyValuePair.Key, keyValuePair.Value);
 
         activity.AddTag(
-            key: TraceSpan.CorrelationIdKey,
+            key: ObservabilityFacilitator.CorrelationIdKey,
             value: auditableInfo.GetCorrelationId().ToString());
         activity.AddTag(
-            key: TraceSpan.SourcePlatformKey,
+            key: ObservabilityFacilitator.SourcePlatformKey,
             value: auditableInfo.GetSourcePlatform().ToString());
         activity.AddTag(
-            key: TraceSpan.ExecutionUserKey,
+            key: ObservabilityFacilitator.ExecutionUserKey,
             value: auditableInfo.GetExecutionUser().ToString());
 
         try
