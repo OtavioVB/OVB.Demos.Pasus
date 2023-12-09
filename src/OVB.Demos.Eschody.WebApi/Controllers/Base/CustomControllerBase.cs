@@ -24,7 +24,8 @@ public abstract class CustomControllerBase : ControllerBase
         _cacheRepository = cacheRepository;
     }
 
-    public async Task SetCacheFromIdempotencyKeyAsync(string actionCacheKey, int statusCode, object? content, CancellationToken cancellationToken)
+    public async Task SetCacheFromIdempotencyKeyAsync(string actionCacheKey, int statusCode, object? content, AuditableInfoValueObject auditableInfo,
+        CancellationToken cancellationToken)
     {
         var memoryStream = new MemoryStream();
         await JsonSerializer.SerializeAsync(
@@ -36,13 +37,16 @@ public abstract class CustomControllerBase : ControllerBase
         await _cacheRepository.SetCacheAsync(
             key: actionCacheKey,
             value: memoryStream.ToArray(),
+            auditableInfo: auditableInfo,
             cancellationToken: cancellationToken);
     }
 
-    public async Task<CacheRequestModel?> GetCacheFromIdempotencyKeyAsync(string actionCacheKey, CancellationToken cancellationToken)
+    public async Task<CacheRequestModel?> GetCacheFromIdempotencyKeyAsync(string actionCacheKey, AuditableInfoValueObject auditableInfo,
+        CancellationToken cancellationToken)
     {
         var cache = await _cacheRepository.GetCacheAsync(
                     key: actionCacheKey,
+                    auditableInfo: auditableInfo,
                     cancellationToken:cancellationToken);
 
         if (cache is null)
@@ -59,19 +63,4 @@ public abstract class CustomControllerBase : ControllerBase
         => CustomUnprocessableEntityResult.Build(
             propertyName: nameof(AuditableInfoValueObject),
             propertyDescription: "The auditable info data is invalid.");
-
-    protected static class TraceSpan
-    {
-        public static string EndpointKey = "Endpoint";
-        public static string HttpMethodKey = "HttpMethod";
-        public static string CorrelationIdKey = "CorrelationId";
-        public static string ExecutionUserKey = "ExecutionUser";
-        public static string SourcePlatformKey = "SourcePlatform";
-        public static string StatusCodeKey = "StatusCode";
-        public static string IdempotencyKey = "IdempotencyKey";
-        public static string HasUsedIdempotencyCache = "HasUsedIdempotencyCache";
-        public static string RemoteHostKey = "RemoteHost";
-        public static string RemoteAddrKey = "RemoteAddress";
-        public static string HttpForwardedForKey = "HttpForwardedFor";
-    }
 }

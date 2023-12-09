@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Inputs;
 using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Outputs;
@@ -7,7 +6,6 @@ using OVB.Demos.Eschody.Application.UseCases.Interfaces;
 using OVB.Demos.Eschody.Domain.StudentContext.ENUMs;
 using OVB.Demos.Eschody.Domain.ValueObjects;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
-using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Models;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Facilitators;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Interfaces;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
@@ -76,6 +74,7 @@ public sealed class StudentController : CustomControllerBase
 
                 var cache = await GetCacheFromIdempotencyKeyAsync(
                     actionCacheKey: actionCacheKey,
+                    auditableInfo: inputAuditableInfo,
                     cancellationToken: inputCancellationToken);
                 if (cache is not null)
                 {
@@ -140,6 +139,7 @@ public sealed class StudentController : CustomControllerBase
                         actionCacheKey: actionCacheKey,
                         statusCode: statusCode,
                         content: useCaseResult.Output,
+                        auditableInfo: inputAuditableInfo,
                         cancellationToken: cancellationToken);
 
                     inputActivity.AppendSpanTag(
@@ -191,6 +191,7 @@ public sealed class StudentController : CustomControllerBase
                         actionCacheKey: actionCacheKey,
                         statusCode: statusCode,
                         content: null,
+                        auditableInfo: inputAuditableInfo,
                         cancellationToken: cancellationToken);
 
                     inputActivity.AppendSpanTag(
@@ -274,6 +275,7 @@ public sealed class StudentController : CustomControllerBase
                     actionCacheKey: actionCacheKey,
                     statusCode: statusCode,
                     content: useCaseResult.Notifications,
+                    auditableInfo: inputAuditableInfo,
                     cancellationToken: cancellationToken);
 
                 return StatusCode(
