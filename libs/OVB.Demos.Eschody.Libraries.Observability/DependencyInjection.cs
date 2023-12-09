@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry;
 using OpenTelemetry.Exporter;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using OVB.Demos.Eschody.Libraries.Observability.Trace;
@@ -34,6 +35,19 @@ public static class DependencyInjection
                     serviceNamespace: applicationNamespace,
                     autoGenerateServiceInstanceId: false,
                     serviceInstanceId: applicationId));
+                p.AddOtlpExporter(p =>
+                {
+                    p.ExportProcessorType = ExportProcessorType.Batch;
+                    p.Endpoint = new Uri(
+                        uriString: openTelemetryGrpcEndpoint);
+                    p.Protocol = OtlpExportProtocol.Grpc;
+                    p.TimeoutMilliseconds = openTelemetryTimeout;
+                });
+            })
+            .WithMetrics(p =>
+            {
+                p.AddMeter(applicationName);
+                p.AddAspNetCoreInstrumentation();
                 p.AddOtlpExporter(p =>
                 {
                     p.ExportProcessorType = ExportProcessorType.Batch;
