@@ -12,17 +12,20 @@ public sealed class CacheRepository : ICacheRepository
         _distributedCache = distributedCache;
     }
 
+    private const int SlidingExpirationSeconds = 86400;
+    private const int ExpirationSeconds = 604800;
+
     public Task<byte[]?> GetCacheAsync(string key, CancellationToken cancellationToken)
         => _distributedCache.GetAsync(key, cancellationToken);
 
-    public Task SetCacheAsync(string key, byte[] value, int expirationSeconds, int memoryExpirationSeconds, CancellationToken cancellationToken)
+    public Task SetCacheAsync(string key, byte[] value, CancellationToken cancellationToken)
         => _distributedCache.SetAsync(
             key: key,
             value: value,
             options: new DistributedCacheEntryOptions()
             {
-                SlidingExpiration = TimeSpan.FromSeconds(memoryExpirationSeconds),
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(expirationSeconds)
+                SlidingExpiration = TimeSpan.FromSeconds(SlidingExpirationSeconds),
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(ExpirationSeconds)
             },
             token: cancellationToken);
 }

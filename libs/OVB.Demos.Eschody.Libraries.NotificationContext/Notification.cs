@@ -1,4 +1,5 @@
 ﻿using OVB.Demos.Eschody.Libraries.NotificationContext.Enums;
+using System.Text.Json.Serialization;
 
 namespace OVB.Demos.Eschody.Libraries.NotificationContext;
 
@@ -12,6 +13,7 @@ public readonly struct Notification
         Index = index;
     }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public int? Index { get; }
     public string Code { get; }
     public string Message { get; }

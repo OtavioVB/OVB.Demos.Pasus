@@ -11,16 +11,18 @@ public readonly struct AuditableInfoValueObject
     private string SourcePlatform { get; }
     private string ExecutionUser { get; }
     private DateTime RequestedAt { get; }
+    private string IdempotencyKey { get; }
     private ProcessResult<Notification> ProcessResult { get; }
 
     private AuditableInfoValueObject(
-        bool isValid, Guid correlationId, string sourcePlatform, string executionUser, DateTime requestedAt, ProcessResult<Notification> processResult)
+        bool isValid, Guid correlationId, string sourcePlatform, string executionUser, DateTime requestedAt, string idempotencyKey, ProcessResult<Notification> processResult)
     {
         IsValid = isValid;
         CorrelationId = correlationId;
         SourcePlatform = sourcePlatform;
         ExecutionUser = executionUser;
         RequestedAt = requestedAt;
+        IdempotencyKey = idempotencyKey;
         ProcessResult = processResult;
     }
 
@@ -30,6 +32,7 @@ public readonly struct AuditableInfoValueObject
         CorrelationId = Guid.Empty;
         SourcePlatform = string.Empty;
         ExecutionUser = string.Empty;
+        IdempotencyKey = string.Empty;
         RequestedAt = DateTime.MinValue;
     }
 
@@ -37,7 +40,7 @@ public readonly struct AuditableInfoValueObject
     public const string SourcePlatformKey = "X-Source-Platform";
     public const string ExecutionUserKey = "X-Execution-User";
     public const string RequestedAtKey = "X-Requested-At";
-    public const string IdempotencyKey = "X-Idempotency-Key";
+    public const string IdempotencyHeaderKey = "X-Idempotency-Key";
 
     public const int ExecutionUserMaxLength = 32;
     public const int ExecutionUserMinLength = 5;
@@ -45,8 +48,11 @@ public readonly struct AuditableInfoValueObject
     public const int SourcePlatformMaxLength = 32;
     public const int SourcePlatformMinLength = 5;
 
+    public const int IdempotencyKeyMaxLength = 32;
+    public const int IdempotencyKeyMinLength = 5;
+
     public static AuditableInfoValueObject Build(
-        Guid correlationId, string sourcePlatform, string executionUser, DateTime requestedAt)
+        Guid correlationId, string sourcePlatform, string executionUser, DateTime requestedAt, string idempotencyKey)
     {
         if (correlationId == Guid.Empty)
             return new AuditableInfoValueObject(false);
@@ -57,6 +63,9 @@ public readonly struct AuditableInfoValueObject
         if (executionUser == string.Empty || executionUser.Length > ExecutionUserMaxLength || executionUser.Length < ExecutionUserMinLength)
             return new AuditableInfoValueObject(false);
 
+        if (idempotencyKey == string.Empty || idempotencyKey.Length > IdempotencyKeyMaxLength || idempotencyKey.Length < IdempotencyKeyMinLength)
+            return new AuditableInfoValueObject();
+
         if (requestedAt > DateTime.UtcNow)
             return new AuditableInfoValueObject(false);
 
@@ -66,6 +75,7 @@ public readonly struct AuditableInfoValueObject
             sourcePlatform: sourcePlatform,
             executionUser: executionUser,
             requestedAt: requestedAt,
+            idempotencyKey: idempotencyKey,
             processResult: ProcessResult<Notification>.BuildSuccessfullProcessResult());
     }
 
@@ -81,6 +91,13 @@ public readonly struct AuditableInfoValueObject
         EschodyValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
 
         return SourcePlatform;
+    }
+
+    public string GetIdempotencyKey()
+    {
+        EschodyValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
+
+        return IdempotencyKey;
     }
 
     public string GetExecutionUser()
@@ -99,5 +116,8 @@ public readonly struct AuditableInfoValueObject
 
     public ProcessResult<Notification> GetProcessResult()
         => ProcessResult;
+
+    public string GenerateCacheKeyWithIdempotencyKey(string cacheKey)
+        => $"{cacheKey}.{GetIdempotencyKey()}";
 
 }

@@ -31,6 +31,9 @@
 - Command Handler Pattern
 - Command Pattern
 - Singleton Pattern
+- Factory Pattern
+- Adapter Pattern
+- Builder Pattern
 - Design Orientado ao Domínio (DDD)
 - Serviços de Domínio
 - Abordagem por casos de uso

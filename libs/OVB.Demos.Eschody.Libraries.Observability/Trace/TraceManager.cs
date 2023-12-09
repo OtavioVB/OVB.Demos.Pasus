@@ -29,7 +29,6 @@ public sealed class TraceManager : ITraceManager
             throw EschodyValueObjectException.ExceptionFromActivityNull;
 
         activity.Start();
-
         
         try
         {
@@ -63,7 +62,6 @@ public sealed class TraceManager : ITraceManager
 
         activity.Start();
 
-
         try
         {
             var result = await handler(
@@ -71,40 +69,6 @@ public sealed class TraceManager : ITraceManager
                 arg2: auditableInfo,
                 arg3: activity,
                 arg4: cancellationToken);
-            activity.SetStatus(ActivityStatusCode.Ok);
-            return result;
-        }
-        catch (Exception ex)
-        {
-            activity.RecordException(ex);
-            activity.SetStatus(ActivityStatusCode.Error);
-            throw;
-        }
-    }
-
-    public async Task<TOutput> ExecuteTraceAsync<TInput, TInput2, TOutput>(
-        string traceName, ActivityKind activityKind, TInput input, TInput2 input2,
-        Func<TInput, TInput2, AuditableInfoValueObject, Activity, CancellationToken, Task<TOutput>> handler,
-        AuditableInfoValueObject auditableInfo, CancellationToken cancellationToken)
-    {
-        using var activity = _activitySource.StartActivity(
-            name: traceName,
-            kind: activityKind);
-
-        if (activity is null)
-            throw EschodyValueObjectException.ExceptionFromActivityNull;
-
-        activity.Start();
-
-
-        try
-        {
-            var result = await handler(
-                arg1: input,
-                arg2: input2,
-                arg3: auditableInfo,
-                arg4: activity,
-                arg5: cancellationToken);
             activity.SetStatus(ActivityStatusCode.Ok);
             return result;
         }
@@ -129,7 +93,6 @@ public sealed class TraceManager : ITraceManager
             throw EschodyValueObjectException.ExceptionFromActivityNull;
 
         activity.Start();
-
 
         try
         {
