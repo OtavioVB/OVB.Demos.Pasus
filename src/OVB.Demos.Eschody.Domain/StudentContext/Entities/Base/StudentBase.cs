@@ -18,7 +18,7 @@ public abstract class StudentBase : ICreateStudentDomainFunction
         _type = type;
     }
 
-    public async Task<ProcessResult<Notification, CreateStudentDomainFunctionResult>> CreateStudentDomainFunctionAsync(
+    public virtual async Task<ProcessResult<Notification, CreateStudentDomainFunctionResult>> CreateStudentDomainFunctionAsync(
         CreateStudentDomainFunctionInput input,
         Func<string, AuditableInfoValueObject, CancellationToken, Task<bool>> verifyStudentExistsByEmail,
         CancellationToken cancellationToken)

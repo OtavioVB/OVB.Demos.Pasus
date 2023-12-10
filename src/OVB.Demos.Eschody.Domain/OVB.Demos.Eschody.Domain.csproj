@@ -10,8 +10,4 @@
     <ProjectReference Include="..\..\libs\OVB.Demos.Eschody.Libraries.ValueObjects\OVB.Demos.Eschody.Libraries.ValueObjects.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TenantContext\Functions\" />
-  </ItemGroup>
-
 </Project>

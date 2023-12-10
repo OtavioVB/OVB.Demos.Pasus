@@ -79,4 +79,7 @@ public static class NotificationFacilitator
     public static Notification FoundationDateLessThanActualTime = Notification.BuildErrorfullNotification(
        code: "PASUS24",
        message: $"A data de fundação da empresa precisa ser igual ou menor a data atual.");
+    public static Notification TenantExistsDomain = Notification.BuildErrorfullNotification(
+       code: "PASUS25",
+       message: $"O CNPJ utilizado pela corporativa já possui cadastro.");
 }
