@@ -22,12 +22,13 @@ public static class DependencyInjection
 {
     public static void ApplyApplicationDependenciesConfiguration(
         this IServiceCollection serviceCollection,
-        string authorizationPrivateToken)
+        string authorizationPrivateToken,
+        string basicAuthorization)
     {
         #region Authorization Manager Configuration
 
         serviceCollection.AddSingleton<IAuthorizationManager, AuthorizationManager>((serviceProvider) => 
-            AuthorizationManager.Build(authorizationPrivateToken));
+            AuthorizationManager.Build(authorizationPrivateToken, basicAuthorization));
 
         #endregion
 

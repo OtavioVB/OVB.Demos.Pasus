@@ -5,12 +5,16 @@ namespace OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Authoriz
 public sealed class AuthorizationManager : IAuthorizationManager
 {
     public string PrivateToken { get; }
+    public string CreateTenantKey { get; }
 
-    private AuthorizationManager(string privateToken)
+    private AuthorizationManager(string privateToken, string createTenantKey)
     {
         PrivateToken = privateToken;
+        CreateTenantKey = createTenantKey;
     }
 
-    public static AuthorizationManager Build(string privateToken)
-        => new AuthorizationManager(privateToken);
+    public const string CreateTenantAuthorizationKey = "X-Pasus-Key";
+
+    public static AuthorizationManager Build(string privateToken, string createTenantKey)
+        => new AuthorizationManager(privateToken, createTenantKey);
 }

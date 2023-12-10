@@ -60,7 +60,9 @@ public partial class Program
 
         builder.Services.ApplyApplicationDependenciesConfiguration(
             authorizationPrivateToken: builder.Configuration["Application:TenantInfo:Authorization:PrivateToken"]
-                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Authorization:PrivateToken\"]"));
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Authorization:PrivateToken\"]"),
+            basicAuthorization: builder.Configuration["Application:TenantInfo:Authorization:Basic"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Authorization:Basic\"]"));
 
         #endregion
 

@@ -3,4 +3,5 @@
 public interface IAuthorizationManager
 {
     public string PrivateToken { get; }
+    public string CreateTenantKey { get; }
 }

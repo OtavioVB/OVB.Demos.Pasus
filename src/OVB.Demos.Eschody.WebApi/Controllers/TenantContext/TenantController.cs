@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Authorization;
+using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Authorization.Interfaces;
 using OVB.Demos.Eschody.Application.UseCases.Interfaces;
 using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Inputs;
 using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Outputs;
@@ -38,9 +40,11 @@ public sealed class TenantController : CustomControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [Route("create")]
-    [Authorize(Roles = "Tenant")]
+    [AllowAnonymous]
     public Task<IActionResult> HttpPostCreateTenantAsync(
         [FromServices] IUseCase<CreateTenantUseCaseInput, CreateTenantUseCaseResult> useCase,
+        [FromServices] IAuthorizationManager authorizationManager,
+        [FromHeader(Name = AuthorizationManager.CreateTenantAuthorizationKey)] string authorizationKey,
         [FromHeader(Name = AuditableInfoValueObject.IdempotencyHeaderKey)] string idempotencyKey,
         [FromHeader(Name = AuditableInfoValueObject.CorrelationIdKey)] Guid correlationId,
         [FromHeader(Name = AuditableInfoValueObject.SourcePlatformKey)] string sourcePlatform,
@@ -48,6 +52,9 @@ public sealed class TenantController : CustomControllerBase
         [FromBody] CreateTenantPayloadInput input,
         CancellationToken cancellationToken)
     {
+        if (authorizationKey != authorizationManager.CreateTenantKey)
+            return Task.FromResult((IActionResult)StatusCode(StatusCodes.Status401Unauthorized, null));
+
         var auditableInfo = AuditableInfoValueObject.Build(
             correlationId: correlationId,
             sourcePlatform: sourcePlatform,
