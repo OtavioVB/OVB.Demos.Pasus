@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OVB.Demos.Eschody.Application.Services.Internal.StudentContext;
 using OVB.Demos.Eschody.Application.Services.Internal.StudentContext.Interfaces;
+using OVB.Demos.Eschody.Application.Services.Internal.TenantContext;
+using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Interfaces;
 using OVB.Demos.Eschody.Application.UseCases.CreateStudent;
 using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Inputs;
 using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Outputs;
@@ -16,6 +18,7 @@ public static class DependencyInjection
         #region Services Configuration
 
         serviceCollection.AddScoped<IStudentService, StudentService>();
+        serviceCollection.AddScoped<ITenantService, TenantService>();
 
         #endregion
 

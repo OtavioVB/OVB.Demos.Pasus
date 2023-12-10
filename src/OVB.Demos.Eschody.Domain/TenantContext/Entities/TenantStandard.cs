@@ -134,7 +134,8 @@ public class TenantStandard : ICreateTenantDomainFunction, IOAuthTenantAuthentic
 
         var validateTenantDisponibility = ProcessResult<Notification>.BuildFromAnotherProcessResult(
             ValidateThatTenantIsAvailable(tenant.IsTenantAvailableUntil),
-            ValidateThatTenantIsEnabled(tenant.IsTenantEnabled));
+            ValidateThatTenantIsEnabled(tenant.IsTenantEnabled),
+            ValidateThatTenantIsEnabledToScope(tenant.Scope, input.Scope.GetScope()));
 
         if (validateTenantDisponibility.IsError)
             return ProcessResult<Notification, OAuthTenantAuthenticationDomainFunctionResult>.BuildErrorfullProcessResult(

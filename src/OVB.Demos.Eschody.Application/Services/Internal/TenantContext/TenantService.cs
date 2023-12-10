@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Authorization.Interfaces;
+﻿using Microsoft.AspNetCore.Authentication;
+using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Authorization.Interfaces;
 using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Inputs;
 using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Interfaces;
 using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Outputs;
@@ -134,7 +135,13 @@ public sealed class TenantService : ITenantService
                 if (oauthTenantAuthenticationResult.IsPartial)
                     throw new NotImplementedException();
 
-                throw new NotImplementedException();
+                return ProcessResult<Notification, OAuthTenantAuthenticationServiceResult>.BuildSuccessfullProcessResult(
+                    output: OAuthTenantAuthenticationServiceResult.Build(
+                        grantType: oauthTenantAuthenticationResult.Output.GrantType,
+                        scope: oauthTenantAuthenticationResult.Output.Scope,
+                        type: oauthTenantAuthenticationResult.Output.Type,
+                        accessToken: oauthTenantAuthenticationResult.Output.AccessToken,
+                        expiresIn: oauthTenantAuthenticationResult.Output.ExpiresIn));
             },
             auditableInfo: auditableInfo,
             cancellationToken: cancellationToken);
