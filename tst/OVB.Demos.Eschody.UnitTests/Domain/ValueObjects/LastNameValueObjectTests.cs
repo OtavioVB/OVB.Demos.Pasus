@@ -41,7 +41,7 @@ public sealed class LastNameValueObjectTests
         var lastNameTitleCase = cultureInfo.TextInfo.ToTitleCase(lastName);
 
         // Assert
-        Assert.Throws<EschodyValueObjectException>(lastNameValueObject.GetLastName);
+        Assert.Throws<PasusValueObjectException>(lastNameValueObject.GetLastName);
         Assert.False(lastNameValueObject.IsValid);
         Assert.False(lastNameValueObject.GetProcessResult().IsSuccess);
         Assert.False(lastNameValueObject.GetProcessResult().IsPartial);

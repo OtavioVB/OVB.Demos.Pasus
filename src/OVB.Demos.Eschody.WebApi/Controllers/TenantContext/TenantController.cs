@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OVB.Demos.Eschody.Domain.ValueObjects;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
 using OVB.Demos.Eschody.Libraries.Observability.Metric.Interfaces;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Interfaces;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
 using OVB.Demos.Eschody.WebApi.Controllers.Base;
+using OVB.Demos.Eschody.WebApi.Controllers.TenantContext.Payloads;
 using System.Net.Mime;
 
 namespace OVB.Demos.Eschody.WebApi.Controllers.TenantContext;
@@ -31,6 +33,9 @@ public sealed class TenantController : CustomControllerBase
         [FromHeader(Name = AuditableInfoValueObject.CorrelationIdKey)] Guid correlationId,
         [FromHeader(Name = AuditableInfoValueObject.SourcePlatformKey)] string sourcePlatform,
         [FromHeader(Name = AuditableInfoValueObject.ExecutionUserKey)] string executionUser,
+        [FromHeader(Name = TenantCredentialsValueObject.ClientIdHeaderKey)] Guid clientId,
+        [FromHeader(Name = TenantCredentialsValueObject.ClientSecretHeaderKey)] Guid clientSecret,
+        [FromBody] OAuthTenantAuthenticationPayloadInput input,
         CancellationToken cancellationToken)
     {
         var auditableInfo = AuditableInfoValueObject.Build(

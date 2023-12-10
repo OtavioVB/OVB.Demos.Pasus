@@ -28,7 +28,7 @@ public sealed class TraceManager : ITraceManager
             kind: activityKind);
 
         if (activity is null)
-            throw EschodyValueObjectException.ExceptionFromActivityNull;
+            throw PasusValueObjectException.ExceptionFromActivityNull;
 
         activity.Start();
 
@@ -75,7 +75,7 @@ public sealed class TraceManager : ITraceManager
             kind: activityKind);
 
         if (activity is null)
-            throw EschodyValueObjectException.ExceptionFromActivityNull;
+            throw PasusValueObjectException.ExceptionFromActivityNull;
 
         activity.Start();
 
@@ -122,7 +122,7 @@ public sealed class TraceManager : ITraceManager
             kind: activityKind);
 
         if (activity is null)
-            throw EschodyValueObjectException.ExceptionFromActivityNull;
+            throw PasusValueObjectException.ExceptionFromActivityNull;
 
         activity.Start();
 
@@ -168,7 +168,7 @@ public sealed class TraceManager : ITraceManager
             kind: activityKind);
 
         if (activity is null)
-            throw EschodyValueObjectException.ExceptionFromActivityNull;
+            throw PasusValueObjectException.ExceptionFromActivityNull;
 
         activity.Start();
 

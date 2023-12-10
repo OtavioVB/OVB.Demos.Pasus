@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Libraries.NotificationContext;
+﻿using OVB.Demos.Eschody.Domain.Notifications;
+using OVB.Demos.Eschody.Libraries.NotificationContext;
 using OVB.Demos.Eschody.Libraries.ProcessResultContext;
 using OVB.Demos.Eschody.Libraries.ValueObjects.Exceptions;
 using System.Security.Cryptography;
@@ -48,15 +49,11 @@ public readonly struct PasswordValueObject
 
         if (password.Length > PasswordMaxLength)
             notifications.Add(
-                item: Notification.BuildErrorfullNotification(
-                    code: "ESC10",
-                    message: $"A senha precisa conter até {PasswordMaxLength} caracteres."));
+                item: NotificationFacilitator.PasswordMaxLength);
 
         if (password.Length < PasswordMinLength)
             notifications.Add(
-                item: Notification.BuildErrorfullNotification(
-                    code: "ESC11",
-                    message: $"A senha precisa conter pelo menos {PasswordMinLength} caracteres."));
+                item: NotificationFacilitator.PasswordMinLength);
 
         if (notifications.Count > 0)
         {
@@ -88,7 +85,7 @@ public readonly struct PasswordValueObject
 
     public string GetPassword()
     {
-        EschodyValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
+        PasusValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
 
         return Password;
     }

@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Libraries.NotificationContext;
+﻿using OVB.Demos.Eschody.Domain.Notifications;
+using OVB.Demos.Eschody.Libraries.NotificationContext;
 using OVB.Demos.Eschody.Libraries.ProcessResultContext;
 using OVB.Demos.Eschody.Libraries.ValueObjects.Exceptions;
 using System.Globalization;
@@ -34,16 +35,10 @@ public readonly struct FirstNameValueObject
         var notifications = new List<Notification>();
 
         if (firstName.Length > FirstNameMaxLength)
-            notifications.Add(
-                item: Notification.BuildErrorfullNotification(
-                    code: "ESC01",
-                    message: $"O nome precisa conter até {FirstNameMaxLength} caracteres."));
+            notifications.Add(NotificationFacilitator.FirstNameMaxLength);
 
         if (firstName.Length < FirstNameMinLength)
-            notifications.Add(
-                item: Notification.BuildErrorfullNotification(
-                    code: "ESC02",
-                    message: $"O nome precisa conter pelo menos {FirstNameMinLength} caracteres."));
+            notifications.Add(NotificationFacilitator.FirstNameMinLength);
 
         var cultureInfo = CultureInfo.GetCultureInfo("pt-BR");
         var firstNameTitleCase = cultureInfo.TextInfo.ToTitleCase(firstName);
@@ -69,7 +64,7 @@ public readonly struct FirstNameValueObject
 
     public string GetFirstName()
     {
-        EschodyValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
+        PasusValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
 
         return FirstName;
     }

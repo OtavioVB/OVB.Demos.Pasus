@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Libraries.NotificationContext;
+﻿using OVB.Demos.Eschody.Domain.Notifications;
+using OVB.Demos.Eschody.Libraries.NotificationContext;
 using OVB.Demos.Eschody.Libraries.ProcessResultContext;
 using OVB.Demos.Eschody.Libraries.ValueObjects.Exceptions;
 using System.Globalization;
@@ -36,21 +37,15 @@ public readonly struct EmailValueObject
 
         if (email.Length > EmailMaxLength)
             notifications.Add(
-                item: Notification.BuildErrorfullNotification(
-                    code: "ESC05",
-                    message: $"O email precisa conter até {EmailMaxLength} caracteres."));
+                item: NotificationFacilitator.EmailMaxLength);
 
         if (email.Length < EmailMinLength)
             notifications.Add(
-                item: Notification.BuildErrorfullNotification(
-                    code: "ESC06",
-                    message: $"O email precisa conter pelo menos {EmailMinLength} caracteres."));
+                item: NotificationFacilitator.EmailMinLength);
 
         if (!Regex.IsMatch(email, "^[a-z0-9.-]+@[a-z0-9]+\\.[a-z]+(\\.[a-z]+)?$", RegexOptions.None, TimeSpan.FromMilliseconds(200)))
             notifications.Add(
-                item: Notification.BuildErrorfullNotification(
-                    code: "ESC07",
-                    message: $"O email inserido precisa ser válido."));
+                item: NotificationFacilitator.EmailValid);
 
 
         if (notifications.Count > 0)
@@ -74,7 +69,7 @@ public readonly struct EmailValueObject
 
     public string GetEmail()
     {
-        EschodyValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
+        PasusValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
 
         return Email;
     }

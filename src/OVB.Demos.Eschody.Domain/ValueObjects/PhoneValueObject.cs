@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Libraries.NotificationContext;
+﻿using OVB.Demos.Eschody.Domain.Notifications;
+using OVB.Demos.Eschody.Libraries.NotificationContext;
 using OVB.Demos.Eschody.Libraries.ProcessResultContext;
 using OVB.Demos.Eschody.Libraries.ValueObjects.Exceptions;
 using System.Text.RegularExpressions;
@@ -34,18 +35,15 @@ public readonly struct PhoneValueObject
 
         if (phone.Length != PhoneLength)
             notifications.Add(
-                item: Notification.BuildErrorfullNotification(
-                    code: "ESC08",
-                    message: $"O telefone precisa conter até {PhoneLength} dígitos."));
+                item: NotificationFacilitator.PhoneLength);
 
         foreach (var character in phone)
         {
             if (!char.IsDigit(character))
             {
                 notifications.Add(
-                    item: Notification.BuildErrorfullNotification(
-                        code: "ESC09",
-                        message: $"O telefone deve conter apenas dígitos."));
+                    item: NotificationFacilitator.PhoneDigit);
+                break;
             }
         }
 
@@ -70,7 +68,7 @@ public readonly struct PhoneValueObject
 
     public string GetPhone()
     {
-        EschodyValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
+        PasusValueObjectException.ThrowExceptionIfTheResourceIsNotValid(IsValid);
 
         return Phone;
     }

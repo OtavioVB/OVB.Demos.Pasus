@@ -31,7 +31,7 @@ public sealed class PhoneValueObjectTests
         var phoneValueObject = PhoneValueObject.Build(phone);
 
         // Assert
-        Assert.Throws<EschodyValueObjectException>(phoneValueObject.GetPhone);
+        Assert.Throws<PasusValueObjectException>(phoneValueObject.GetPhone);
         Assert.False(phoneValueObject.IsValid);
         Assert.False(phoneValueObject.GetProcessResult().IsSuccess);
         Assert.False(phoneValueObject.GetProcessResult().IsPartial);

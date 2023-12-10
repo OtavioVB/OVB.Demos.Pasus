@@ -53,7 +53,7 @@ public sealed class PasswordValueObjectTests
         // Act
 
         // Assert
-        Assert.Throws<EschodyValueObjectException>(passwordValueObject.GetPassword);
+        Assert.Throws<PasusValueObjectException>(passwordValueObject.GetPassword);
         Assert.False(passwordValueObject.IsValid);
         Assert.False(passwordValueObject.GetProcessResult().IsSuccess);
         Assert.False(passwordValueObject.GetProcessResult().IsPartial);

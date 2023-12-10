@@ -1,4 +1,6 @@
-﻿namespace OVB.Demos.Eschody.Domain.TenantContext.DataTransferObject;
+﻿using OVB.Demos.Eschody.Domain.TenantContext.ENUMs;
+
+namespace OVB.Demos.Eschody.Domain.TenantContext.DataTransferObject;
 
 public sealed record Tenant
 {
@@ -7,8 +9,8 @@ public sealed record Tenant
         
         Guid correlationId, string sourcePlatform, string executionUser, DateTime createdAt, 
         
-        string comercialName, string socialReason, string cnpj, DateTime foundationDate, string composition, 
-        string primaryCnaeCode, string scope, DateTime isTenantAvailableUntil, bool isTenantEnabled, 
+        string email, string comercialName, string socialReason, string cnpj, string password, DateTime foundationDate, 
+        TypeTenantComposition composition, string primaryCnaeCode, string scope, DateTime isTenantAvailableUntil, bool isTenantEnabled, 
         
         Guid lastCorrelationId, string lastSourcePlatform, string lastExecutionUser, DateTime lastModifiedAt)
     {
@@ -18,9 +20,11 @@ public sealed record Tenant
         SourcePlatform = sourcePlatform;
         ExecutionUser = executionUser;
         CreatedAt = createdAt;
+        Email = email;
         ComercialName = comercialName;
         SocialReason = socialReason;
         Cnpj = cnpj;
+        Password = password;
         FoundationDate = foundationDate;
         Composition = composition;
         PrimaryCnaeCode = primaryCnaeCode;
@@ -41,11 +45,13 @@ public sealed record Tenant
     public string ExecutionUser { get; set; }
     public DateTime CreatedAt { get; set; }
 
+    public string Email { get; set; }
     public string ComercialName { get; set; }
     public string SocialReason { get; set; }
     public string Cnpj { get; set; }
+    public string Password { get; set; }
     public DateTime FoundationDate { get; set; }
-    public string Composition { get; set; }
+    public TypeTenantComposition Composition { get; set; }
     public string PrimaryCnaeCode { get; set; }
     public string Scope { get; set; }
     public DateTime IsTenantAvailableUntil { get; set; }

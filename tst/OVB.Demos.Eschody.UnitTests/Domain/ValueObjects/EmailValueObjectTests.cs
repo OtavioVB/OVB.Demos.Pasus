@@ -38,7 +38,7 @@ public sealed class EmailValueObjectTests
         // Act
 
         // Assert
-        Assert.Throws<EschodyValueObjectException>(() => emailValueObject.GetEmail());
+        Assert.Throws<PasusValueObjectException>(() => emailValueObject.GetEmail());
         Assert.False(emailValueObject.IsValid);
         Assert.False(emailValueObject.GetProcessResult().IsSuccess);
         Assert.False(emailValueObject.GetProcessResult().IsPartial);

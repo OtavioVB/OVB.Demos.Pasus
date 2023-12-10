@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Domain.StudentContext.ENUMs;
+﻿using OVB.Demos.Eschody.Domain.Notifications;
+using OVB.Demos.Eschody.Domain.StudentContext.ENUMs;
 using OVB.Demos.Eschody.Domain.StudentContext.Functions.CreateStudent.Inputs;
 using OVB.Demos.Eschody.Domain.StudentContext.Functions.CreateStudent.Interfaces;
 using OVB.Demos.Eschody.Domain.StudentContext.Functions.CreateStudent.Outputs;
@@ -72,10 +73,7 @@ public abstract class StudentBase : ICreateStudentDomainFunction
         if (studentExists)
             return ProcessResult<Notification>.BuildErrorfullProcessResult(
                 notifications: [
-                    Notification.BuildErrorfullNotification(
-                        code: "ESC12",
-                        message: "Esse estudante já existe com as credenciais enviadas.",
-                        index: index)
+                    NotificationFacilitator.StudentExistDomain(index)
                 ],
                 exceptions: null);
         else

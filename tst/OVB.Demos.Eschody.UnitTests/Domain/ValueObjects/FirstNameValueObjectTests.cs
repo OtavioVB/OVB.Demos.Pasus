@@ -42,7 +42,7 @@ public sealed class FirstNameValueObjectTests
         var firstNameTitleCase = cultureInfo.TextInfo.ToTitleCase(firstName);
 
         // Assert
-        Assert.Throws<EschodyValueObjectException>(() => firstNameValueObject.GetFirstName());
+        Assert.Throws<PasusValueObjectException>(() => firstNameValueObject.GetFirstName());
         Assert.False(firstNameValueObject.IsValid);
         Assert.False(firstNameValueObject.GetProcessResult().IsSuccess);
         Assert.False(firstNameValueObject.GetProcessResult().IsPartial);
