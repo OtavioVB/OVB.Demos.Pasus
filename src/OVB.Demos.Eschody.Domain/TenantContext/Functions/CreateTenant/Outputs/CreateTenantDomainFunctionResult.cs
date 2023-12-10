@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Domain.ValueObjects;
+﻿using OVB.Demos.Eschody.Domain.TenantContext.DataTransferObject;
+using OVB.Demos.Eschody.Domain.ValueObjects;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
 
 namespace OVB.Demos.Eschody.Domain.TenantContext.Functions.CreateTenant.Outputs;
@@ -42,4 +43,28 @@ public readonly struct CreateTenantDomainFunctionResult
         FoundationDateValueObject foundationDate, DateTime isAvailableUntil, bool isTenantEnabled)
         => new CreateTenantDomainFunctionResult(tenantCredentials, auditableInfo, email, password, comercialName, socialReason, primaryCnaeCode, 
             cnpj, composition, scope, foundationDate, isAvailableUntil, isTenantEnabled);
+
+    public Tenant Adapt()
+        => new Tenant(
+            clientId: TenantCredentials.GetClientId(),
+            clientSecret: TenantCredentials.GetClientSecret(),
+            correlationId: AuditableInfo.GetCorrelationId(),
+            sourcePlatform: AuditableInfo.GetSourcePlatform(),
+            executionUser: AuditableInfo.GetExecutionUser(),
+            createdAt: AuditableInfo.GetRequestedAt(),
+            email: Email.GetEmail(),
+            comercialName: ComercialName.GetComercialName(),
+            socialReason: SocialReason.GetSocialReason(),
+            cnpj: Cnpj.GetCnpj(),
+            password: Password.GetPassword(),
+            foundationDate: FoundationDate.GetFoundationDate(),
+            composition: Composition.GetComposition(),
+            primaryCnaeCode: PrimaryCnaeCode.GetCnaeCode(),
+            scope: Scope.GetScope(),
+            isTenantAvailableUntil: IsAvailableUntil,
+            isTenantEnabled: IsTenantEnabled,
+            lastCorrelationId: AuditableInfo.GetCorrelationId(),
+            lastSourcePlatform: AuditableInfo.GetSourcePlatform(),
+            lastExecutionUser: AuditableInfo.GetExecutionUser(),
+            lastModifiedAt: AuditableInfo.GetRequestedAt());
 }

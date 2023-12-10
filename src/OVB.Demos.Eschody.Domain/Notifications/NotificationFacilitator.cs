@@ -97,5 +97,8 @@ public static class NotificationFacilitator
     public static Notification TenantIsEnabled = Notification.BuildErrorfullNotification(
        code: "PASUS30",
        message: $"A aplicação cliente não está habilitada nesse momento.");
+    public static Notification TenantScopeIsNotValid(string scope) => Notification.BuildErrorfullNotification(
+       code: "PASUS31",
+       message: $"A aplicação cliente não está apta para utilizar os escopos de autorização enviado ({scope}).");
 
 }

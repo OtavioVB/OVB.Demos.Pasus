@@ -194,6 +194,34 @@ public class TenantStandard : ICreateTenantDomainFunction, IOAuthTenantAuthentic
             expiresIn: oauthTokenExpiresIn);
     }
 
+
+    protected virtual ProcessResult<Notification> ValidateThatTenantIsEnabledToScope(string scopeRegistered, string scopeProvided)
+    {
+        var scopesRegistered = scopeRegistered.Split(' ');
+        var scopesProvided = scopeRegistered.Split(' ');
+
+        for (int i = 0; i < scopesProvided.Length; i++)
+        {
+            var hasPermission = false;
+
+            for (int j = 0; j < scopesRegistered.Length; j++)
+            {
+                if (scopeProvided[i] == scopeRegistered[j])
+                    hasPermission = true;
+            }
+
+            if (!hasPermission)
+            {
+                return ProcessResult<Notification>.BuildErrorfullProcessResult(
+                   notifications: [
+                       NotificationFacilitator.TenantScopeIsNotValid(scopesProvided[i])
+                   ],
+                   exceptions: null);
+            }
+        }
+
+        return ProcessResult<Notification>.BuildSuccessfullProcessResult();
+    }
     protected virtual ProcessResult<Notification> ValidateThatTenantIsEnabled(bool enabled)
     {
         if (enabled == false)
@@ -203,9 +231,7 @@ public class TenantStandard : ICreateTenantDomainFunction, IOAuthTenantAuthentic
                ],
                exceptions: null);
         else
-            return ProcessResult<Notification>.BuildSuccessfullProcessResult(
-                notifications: null,
-                exceptions: null);
+            return ProcessResult<Notification>.BuildSuccessfullProcessResult();
     }
 
     protected virtual ProcessResult<Notification> ValidateThatTenantIsAvailable(DateTime isAvailableUntil)
@@ -217,9 +243,7 @@ public class TenantStandard : ICreateTenantDomainFunction, IOAuthTenantAuthentic
                ],
                exceptions: null);
         else
-            return ProcessResult<Notification>.BuildSuccessfullProcessResult(
-                notifications: null,
-                exceptions: null);
+            return ProcessResult<Notification>.BuildSuccessfullProcessResult();
     }
 
     protected virtual ProcessResult<Notification> ValidateThatClientSecretIsValid(TenantCredentialsValueObject credentials, Guid clientSecret)
@@ -231,9 +255,7 @@ public class TenantStandard : ICreateTenantDomainFunction, IOAuthTenantAuthentic
                ],
                exceptions: null);
         else
-            return ProcessResult<Notification>.BuildSuccessfullProcessResult(
-                notifications: null,
-                exceptions: null);
+            return ProcessResult<Notification>.BuildSuccessfullProcessResult();
     }
 
     protected virtual ProcessResult<Notification> ValidateThatTenantIsNotNull<TEntity>(TEntity? entity)
@@ -245,9 +267,7 @@ public class TenantStandard : ICreateTenantDomainFunction, IOAuthTenantAuthentic
                ],
                exceptions: null);
         else
-            return ProcessResult<Notification>.BuildSuccessfullProcessResult(
-                notifications: null,
-                exceptions: null);
+            return ProcessResult<Notification>.BuildSuccessfullProcessResult();
     }
 
     protected virtual ProcessResult<Notification> ValidateThatTenantDoesNotExistsYet(bool tenantExists)
@@ -259,8 +279,6 @@ public class TenantStandard : ICreateTenantDomainFunction, IOAuthTenantAuthentic
                 ],
                 exceptions: null);
         else
-            return ProcessResult<Notification>.BuildSuccessfullProcessResult(
-                notifications: null,
-                exceptions: null);
+            return ProcessResult<Notification>.BuildSuccessfullProcessResult();
     }
 }

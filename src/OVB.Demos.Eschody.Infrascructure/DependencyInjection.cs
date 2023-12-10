@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OVB.Demos.Eschody.Domain.StudentContext.DataTransferObject;
+using OVB.Demos.Eschody.Domain.TenantContext.DataTransferObject;
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore;
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.Repositories;
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.Repositories.Base.Interfaces;
@@ -71,10 +72,13 @@ public static class DependencyInjection
 
         #endregion
 
-        #region Repositories Configuration
+        #region Entity Framework Core Repositories Configuration
 
         serviceCollection.AddScoped<IBaseRepository<Student>, StudentRepository>();
         serviceCollection.AddScoped<IExtensionStudentRepository, StudentRepository>();
+
+        serviceCollection.AddScoped<IBaseRepository<Tenant>, TenantRepository>();
+        serviceCollection.AddScoped<IExtensionTenantRepository, TenantRepository>();
 
         #endregion
     }
