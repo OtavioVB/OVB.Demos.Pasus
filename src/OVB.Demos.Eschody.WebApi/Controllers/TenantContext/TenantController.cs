@@ -17,6 +17,7 @@ using OVB.Demos.Eschody.Libraries.Observability.Trace.Interfaces;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
 using OVB.Demos.Eschody.WebApi.Controllers.Base;
 using OVB.Demos.Eschody.WebApi.Controllers.TenantContext.Payloads;
+using OVB.Demos.Eschody.WebApi.Controllers.TenantContext.Sendloads;
 using System.Diagnostics;
 using System.Net.Mime;
 
@@ -44,8 +45,6 @@ public sealed class TenantController : CustomControllerBase
         [FromHeader(Name = AuditableInfoValueObject.CorrelationIdKey)] Guid correlationId,
         [FromHeader(Name = AuditableInfoValueObject.SourcePlatformKey)] string sourcePlatform,
         [FromHeader(Name = AuditableInfoValueObject.ExecutionUserKey)] string executionUser,
-        [FromHeader(Name = TenantCredentialsValueObject.ClientIdHeaderKey)] Guid clientId,
-        [FromHeader(Name = TenantCredentialsValueObject.ClientSecretHeaderKey)] Guid clientSecret,
         [FromBody] CreateTenantPayloadInput input,
         CancellationToken cancellationToken)
     {
@@ -159,6 +158,20 @@ public sealed class TenantController : CustomControllerBase
 
                 if (useCaseResult.IsSuccess)
                 {
+                    var sendload = new CreateTenantSendload(
+                        clientId: useCaseResult.Output.Credentials.GetClientId(),
+                        clientSecret: useCaseResult.Output.Credentials.GetClientSecret(),
+                        email: useCaseResult.Output.Email.GetEmail(),
+                        cnpj: useCaseResult.Output.Cnpj.GetCnpj(),
+                        comercialName: useCaseResult.Output.ComercialName.GetComercialName(),
+                        socialReason: useCaseResult.Output.SocialReason.GetSocialReason(),
+                        primaryCnaeCode: useCaseResult.Output.PrimaryCnaeCode.GetCnaeCode(),
+                        composition: (int)useCaseResult.Output.Composition.GetComposition(),
+                        scope: useCaseResult.Output.Scope.GetScope(),
+                        foundationDate: DateTime.SpecifyKind(useCaseResult.Output.FoundationDate.GetFoundationDate(), 
+                            DateTimeKind.Unspecified).AddHours(-3).ToString("dd/MM/yyyy"),
+                        isAvailableUntil: useCaseResult.Output.IsAvailableUntil,
+                        isEnabled: useCaseResult.Output.IsEnabled);
                     statusCode = StatusCodes.Status201Created;
                     await SetCacheFromIdempotencyKeyAsync(
                         actionCacheKey: actionCacheKey,
@@ -387,11 +400,18 @@ public sealed class TenantController : CustomControllerBase
 
                 if (useCaseResult.IsSuccess)
                 {
+                    var sendload = new OAuthTenantAuthenticationSendload(
+                        accessToken: useCaseResult.Output.AccessToken,
+                        type: useCaseResult.Output.Type,
+                        grantType: useCaseResult.Output.GrantType.GetGrantType(),
+                        scope: useCaseResult.Output.Scope.GetScope(),
+                        expiresIn: useCaseResult.Output.ExpiresIn,
+                        notifications: useCaseResult.Notifications);
                     statusCode = StatusCodes.Status201Created;
                     await SetCacheFromIdempotencyKeyAsync(
                         actionCacheKey: actionCacheKey,
                         statusCode: statusCode,
-                        content: useCaseResult.Output,
+                        content: sendload,
                         auditableInfo: auditableInfo,
                         cancellationToken: cancellationToken);
 
@@ -432,7 +452,7 @@ public sealed class TenantController : CustomControllerBase
 
                     return StatusCode(
                         statusCode: statusCode,
-                        value: useCaseResult.Output);
+                        value: sendload);
                 }
 
                 if (useCaseResult.IsPartial)
