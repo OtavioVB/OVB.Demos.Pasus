@@ -39,7 +39,17 @@ public partial class Program
                 ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Database:PostgreeSQL:ConnectionString\"]"),
             redisConnectionString: builder.Configuration["Application:TenantInfo:Infrascructure:Database:Redis:ConnectionString"]
                 ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Database:Redis:ConnectionString\"]"),
-            applicationName: builder.Configuration["Application:TenantInfo:Name"]!);
+            applicationName: builder.Configuration["Application:TenantInfo:Name"]!,
+            rabbitMqClientProviderName: builder.Configuration["Application:TenantInfo:Name"]!,
+            rabbitMqHostName: builder.Configuration["Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Hostname"] 
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Hostname\"]"),
+            rabbitMqUsername: builder.Configuration["Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Username"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Username\"]"),
+            rabbitVirtualHost: builder.Configuration["Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Virtualhost"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Virtualhost\"]"),
+            rabbitMqPassword: builder.Configuration["Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Password"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Password\"]"),
+            rabbitMqPort: Convert.ToInt32(builder.Configuration["Application:TenantInfo:Infrascructure:Messenger:RabbitMq:Port"]));
 
         #endregion
 
