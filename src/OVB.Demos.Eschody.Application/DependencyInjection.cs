@@ -2,6 +2,8 @@
 using OVB.Demos.Eschody.Application.Services.Internal.StudentContext;
 using OVB.Demos.Eschody.Application.Services.Internal.StudentContext.Interfaces;
 using OVB.Demos.Eschody.Application.Services.Internal.TenantContext;
+using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Authorization;
+using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Authorization.Interfaces;
 using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Interfaces;
 using OVB.Demos.Eschody.Application.UseCases.Interfaces;
 using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent;
@@ -19,8 +21,16 @@ namespace OVB.Demos.Eschody.Application;
 public static class DependencyInjection
 {
     public static void ApplyApplicationDependenciesConfiguration(
-        this IServiceCollection serviceCollection)
+        this IServiceCollection serviceCollection,
+        string authorizationPrivateToken)
     {
+        #region Authorization Manager Configuration
+
+        serviceCollection.AddSingleton<IAuthorizationManager, AuthorizationManager>((serviceProvider) => 
+            AuthorizationManager.Build(authorizationPrivateToken));
+
+        #endregion
+
         #region Services Configuration
 
         serviceCollection.AddScoped<IStudentService, StudentService>();

@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using OVB.Demos.Eschody.Application.UseCases.Interfaces;
 using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Inputs;
 using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Outputs;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.CreateTenant.Inputs;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.CreateTenant.Outputs;
 using OVB.Demos.Eschody.Application.UseCases.TenantContext.OAuthTenantAuthentication.Inputs;
 using OVB.Demos.Eschody.Application.UseCases.TenantContext.OAuthTenantAuthentication.Outputs;
 using OVB.Demos.Eschody.Domain.StudentContext.ENUMs;
@@ -26,6 +28,238 @@ public sealed class TenantController : CustomControllerBase
     public TenantController(ITraceManager traceManager, ICacheRepository cacheRepository, IMetricManager metricManager) 
         : base(traceManager, cacheRepository, metricManager)
     {
+    }
+
+    [HttpPost]
+    [Consumes(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+    [Route("create")]
+    [Authorize(Roles = "Tenant")]
+    public Task<IActionResult> HttpPostCreateTenantAsync(
+        [FromServices] IUseCase<CreateTenantUseCaseInput, CreateTenantUseCaseResult> useCase,
+        [FromHeader(Name = AuditableInfoValueObject.IdempotencyHeaderKey)] string idempotencyKey,
+        [FromHeader(Name = AuditableInfoValueObject.CorrelationIdKey)] Guid correlationId,
+        [FromHeader(Name = AuditableInfoValueObject.SourcePlatformKey)] string sourcePlatform,
+        [FromHeader(Name = AuditableInfoValueObject.ExecutionUserKey)] string executionUser,
+        [FromHeader(Name = TenantCredentialsValueObject.ClientIdHeaderKey)] Guid clientId,
+        [FromHeader(Name = TenantCredentialsValueObject.ClientSecretHeaderKey)] Guid clientSecret,
+        [FromBody] CreateTenantPayloadInput input,
+        CancellationToken cancellationToken)
+    {
+        var auditableInfo = AuditableInfoValueObject.Build(
+            correlationId: correlationId,
+            sourcePlatform: sourcePlatform,
+            executionUser: executionUser,
+            idempotencyKey: idempotencyKey,
+            requestedAt: DateTime.UtcNow);
+        if (!auditableInfo.IsValid)
+            return Task.FromResult((IActionResult)StatusCode(
+                statusCode: StatusCodes.Status422UnprocessableEntity,
+                value: GetUnprocessableEntityForInvalidAuditable()));
+
+        return _traceManager.ExecuteTraceAsync<CreateTenantPayloadInput, IActionResult>(
+            traceName: nameof(HttpPostCreateTenantAsync),
+            activityKind: ActivityKind.Internal,
+            input: input,
+            handler: async (input, auditableInfo, activity, cancellationToken) =>
+            {
+                var actionCacheKey = auditableInfo.GenerateCacheKeyWithIdempotencyKey(
+                        cacheKey: nameof(HttpPostCreateTenantAsync));
+                var statusCode = 503;
+                var hasUsedIdempotencyCache = false;
+
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.CorrelationIdKey, auditableInfo.GetCorrelationId().ToString());
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.RequestedAtKey, auditableInfo.GetRequestedAt().ToString("dd/MM/yyyy HH:mm:ss"));
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.SourcePlatformKey, auditableInfo.GetSourcePlatform());
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.ExecutionUserKey, auditableInfo.GetExecutionUser());
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.IdempotencyHeaderKey, auditableInfo.GetIdempotencyKey());
+
+                _metricManager.CreateCounterIfNotExists(
+                    counterName: nameof(HttpPostCreateTenantAsync));
+                _metricManager.IncrementCounter(
+                    counterName: nameof(HttpPostCreateTenantAsync),
+                    auditableInfo: auditableInfo,
+                    keyValuePairs: [
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.CorrelationIdKey,
+                            value: (object?)auditableInfo.GetCorrelationId().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.SourcePlatformKey,
+                            value: (object?)auditableInfo.GetSourcePlatform().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.ExecutionUserKey,
+                            value: (object?)auditableInfo.GetExecutionUser().ToString())
+                    ]);
+
+                var cache = await GetCacheFromIdempotencyKeyAsync(
+                    actionCacheKey: actionCacheKey,
+                    auditableInfo: auditableInfo,
+                    cancellationToken: cancellationToken);
+                if (cache is not null)
+                {
+                    statusCode = cache.StatusCode;
+                    hasUsedIdempotencyCache = true;
+
+                    activity.AppendSpanTag(
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HttpMethodKey,
+                            value: "HTTP POST"),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.EndpointKey,
+                            value: "api/v1/backoffice/tenant/create"),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.CorrelationIdKey,
+                            value: auditableInfo.GetCorrelationId().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.ExecutionUserKey,
+                            value: auditableInfo.GetExecutionUser()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.SourcePlatformKey,
+                            value: auditableInfo.GetSourcePlatform()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.IdempotencyKey,
+                            value: auditableInfo.GetIdempotencyKey()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.StatusCodeKey,
+                            value: statusCode.ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
+                            value: hasUsedIdempotencyCache.ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.RemoteHostKey,
+                            value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.RemoteAddrKey,
+                            value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HttpForwardedForKey,
+                            value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
+
+                    return StatusCode(
+                        statusCode: cache.StatusCode,
+                        value: cache.Response);
+                }
+
+                var useCaseResult = await useCase.ExecuteUseCaseAsync(
+                    input: CreateTenantUseCaseInput.Build(
+                        email: EmailValueObject.Build(input.Email),
+                        password: PasswordValueObject.Build(input.Password, false),
+                        comercialName: ComercialNameValueObject.Build(input.ComercialName),
+                        socialReason: SocialReasonValueObject.Build(input.SocialReason),
+                        primaryCnaeCode: CnaeCodeValueObject.Build(input.PrimaryCnaeCode),
+                        cnpj: CnpjValueObject.Build(input.Cnpj),
+                        composition: CompositionValueObject.Build(input.Composition),
+                        scope: TenantScopeValueObject.Build(input.Scope),
+                        foundationDate: FoundationDateValueObject.Build(input.FoundationDate)),
+                    auditableInfo: auditableInfo,
+                    cancellationToken: cancellationToken);
+
+                if (useCaseResult.IsSuccess)
+                {
+                    statusCode = StatusCodes.Status201Created;
+                    await SetCacheFromIdempotencyKeyAsync(
+                        actionCacheKey: actionCacheKey,
+                        statusCode: statusCode,
+                        content: useCaseResult.Output,
+                        auditableInfo: auditableInfo,
+                        cancellationToken: cancellationToken);
+
+                    activity.AppendSpanTag(
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HttpMethodKey,
+                            value: "HTTP POST"),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.EndpointKey,
+                            value: "api/v1/backoffice/student/create"),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.CorrelationIdKey,
+                            value: auditableInfo.GetCorrelationId().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.ExecutionUserKey,
+                            value: auditableInfo.GetExecutionUser()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.SourcePlatformKey,
+                            value: auditableInfo.GetSourcePlatform()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.IdempotencyKey,
+                            value: auditableInfo.GetIdempotencyKey()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.StatusCodeKey,
+                            value: statusCode.ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
+                            value: hasUsedIdempotencyCache.ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.RemoteHostKey,
+                            value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.RemoteAddrKey,
+                            value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HttpForwardedForKey,
+                            value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
+
+                    return StatusCode(
+                        statusCode: statusCode,
+                        value: useCaseResult.Output);
+                }
+
+                if (useCaseResult.IsPartial)
+                    throw new NotImplementedException();
+
+                activity.AppendSpanTag(
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.HttpMethodKey,
+                        value: "HTTP POST"),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.EndpointKey,
+                        value: "api/v1/backoffice/student/create"),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.CorrelationIdKey,
+                        value: auditableInfo.GetCorrelationId().ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.ExecutionUserKey,
+                        value: auditableInfo.GetExecutionUser()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.SourcePlatformKey,
+                        value: auditableInfo.GetSourcePlatform()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.IdempotencyKey,
+                        value: auditableInfo.GetIdempotencyKey()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.StatusCodeKey,
+                        value: statusCode.ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.HasUsedIdempotencyCache,
+                        value: hasUsedIdempotencyCache.ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.RemoteHostKey,
+                        value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.RemoteAddrKey,
+                        value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.HttpForwardedForKey,
+                        value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
+
+                statusCode = StatusCodes.Status400BadRequest;
+
+                await SetCacheFromIdempotencyKeyAsync(
+                    actionCacheKey: actionCacheKey,
+                    statusCode: statusCode,
+                    content: useCaseResult.Notifications,
+                    auditableInfo: auditableInfo,
+                    cancellationToken: cancellationToken);
+
+                return StatusCode(
+                    statusCode: statusCode,
+                    value: useCaseResult.Notifications);
+            },
+            auditableInfo: auditableInfo,
+            cancellationToken: cancellationToken);
     }
 
     [HttpPost]

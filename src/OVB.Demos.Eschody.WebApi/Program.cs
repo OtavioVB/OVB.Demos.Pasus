@@ -1,7 +1,10 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using OVB.Demos.Eschody.Application;
 using OVB.Demos.Eschody.Infrascructure;
 using OVB.Demos.Eschody.Libraries.Observability;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace OVB.Demos.Eschody.WebApi;
@@ -55,7 +58,31 @@ public partial class Program
 
         #region Application Dependencies Configuration
 
-        builder.Services.ApplyApplicationDependenciesConfiguration();
+        builder.Services.ApplyApplicationDependenciesConfiguration(
+            authorizationPrivateToken: builder.Configuration["Application:TenantInfo:Authorization:PrivateToken"]
+                ?? throw new ArgumentNullException("builder.Configuration[\"Application:TenantInfo:Authorization:PrivateToken\"]"));
+
+        #endregion
+
+        #region Authentication & Authorization Configuration
+
+        builder.Services.AddAuthentication(p =>
+        {
+            p.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            p.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(p =>
+        {
+            p.RequireHttpsMetadata = false;
+            p.SaveToken = true;
+            p.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    key: Encoding.ASCII.GetBytes(builder.Configuration["Application:TenantInfo:Authorization:PrivateToken"]!)),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
 
         #endregion
 
@@ -68,7 +95,8 @@ public partial class Program
             });
 
         var app = builder.Build();
-
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.MapControllers();
         app.Run();
     }
