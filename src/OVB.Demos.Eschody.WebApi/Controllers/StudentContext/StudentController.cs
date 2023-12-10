@@ -34,7 +34,7 @@ public sealed class StudentController : CustomControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     [Route("create")]
-    [AllowAnonymous]
+    [Authorize(Roles = "Tenant")]
     public Task<IActionResult> HttpPostCreateStudentServiceAsync(
         [FromServices] IUseCase<CreateStudentUseCaseInput, CreateStudentUseCaseResult> useCase,
         [FromHeader(Name = AuditableInfoValueObject.IdempotencyHeaderKey)] string idempotencyKey,
