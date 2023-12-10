@@ -1,13 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OVB.Demos.Eschody.Application.UseCases.Interfaces;
+using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Inputs;
+using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Outputs;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.OAuthTenantAuthentication.Inputs;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.OAuthTenantAuthentication.Outputs;
+using OVB.Demos.Eschody.Domain.StudentContext.ENUMs;
 using OVB.Demos.Eschody.Domain.ValueObjects;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
 using OVB.Demos.Eschody.Libraries.Observability.Metric.Interfaces;
+using OVB.Demos.Eschody.Libraries.Observability.Trace.Facilitators;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Interfaces;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
 using OVB.Demos.Eschody.WebApi.Controllers.Base;
 using OVB.Demos.Eschody.WebApi.Controllers.TenantContext.Payloads;
+using System.Diagnostics;
 using System.Net.Mime;
 
 namespace OVB.Demos.Eschody.WebApi.Controllers.TenantContext;
@@ -28,7 +36,8 @@ public sealed class TenantController : CustomControllerBase
     [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
     [Route("oauth/token")]
     [AllowAnonymous]
-    public Task<IActionResult> OAuthTenantAuthenticationAsync(
+    public Task<IActionResult> HttpPostOAuthTenantAuthenticationAsync(
+        [FromServices] IUseCase<OAuthTenantAuthenticationUseCaseInput, OAuthTenantAuthenticationUseCaseResult> useCase,
         [FromHeader(Name = AuditableInfoValueObject.IdempotencyHeaderKey)] string idempotencyKey,
         [FromHeader(Name = AuditableInfoValueObject.CorrelationIdKey)] Guid correlationId,
         [FromHeader(Name = AuditableInfoValueObject.SourcePlatformKey)] string sourcePlatform,
@@ -49,6 +58,201 @@ public sealed class TenantController : CustomControllerBase
                 statusCode: StatusCodes.Status422UnprocessableEntity,
                 value: GetUnprocessableEntityForInvalidAuditable()));
 
-        throw new NotImplementedException();
+        return _traceManager.ExecuteTraceAsync<OAuthTenantAuthenticationPayloadInput, IActionResult>(
+            traceName: nameof(HttpPostOAuthTenantAuthenticationAsync),
+            activityKind: ActivityKind.Internal,
+            input: input,
+            handler: async (input, auditableInfo, activity, cancellationToken) =>
+            {
+                var actionCacheKey = auditableInfo.GenerateCacheKeyWithIdempotencyKey(
+                        cacheKey: nameof(HttpPostOAuthTenantAuthenticationAsync));
+                var statusCode = 503;
+                var hasUsedIdempotencyCache = false;
+
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.CorrelationIdKey, auditableInfo.GetCorrelationId().ToString());
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.RequestedAtKey, auditableInfo.GetRequestedAt().ToString("dd/MM/yyyy HH:mm:ss"));
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.SourcePlatformKey, auditableInfo.GetSourcePlatform());
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.ExecutionUserKey, auditableInfo.GetExecutionUser());
+                HttpContext.Response.Headers.Append(AuditableInfoValueObject.IdempotencyHeaderKey, auditableInfo.GetIdempotencyKey());
+
+                _metricManager.CreateCounterIfNotExists(
+                    counterName: nameof(HttpPostOAuthTenantAuthenticationAsync));
+                _metricManager.IncrementCounter(
+                    counterName: nameof(HttpPostOAuthTenantAuthenticationAsync),
+                    auditableInfo: auditableInfo,
+                    keyValuePairs: [
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.CorrelationIdKey,
+                            value: (object?)auditableInfo.GetCorrelationId().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.SourcePlatformKey,
+                            value: (object?)auditableInfo.GetSourcePlatform().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.ExecutionUserKey,
+                            value: (object?)auditableInfo.GetExecutionUser().ToString())
+                    ]);
+
+                var cache = await GetCacheFromIdempotencyKeyAsync(
+                    actionCacheKey: actionCacheKey,
+                    auditableInfo: auditableInfo,
+                    cancellationToken: cancellationToken);
+                if (cache is not null)
+                {
+                    statusCode = cache.StatusCode;
+                    hasUsedIdempotencyCache = true;
+
+                    activity.AppendSpanTag(
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HttpMethodKey,
+                            value: "HTTP POST"),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.EndpointKey,
+                            value: "api/v1/backoffice/tenant/oauth/token"),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.CorrelationIdKey,
+                            value: auditableInfo.GetCorrelationId().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.ExecutionUserKey,
+                            value: auditableInfo.GetExecutionUser()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.SourcePlatformKey,
+                            value: auditableInfo.GetSourcePlatform()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.IdempotencyKey,
+                            value: auditableInfo.GetIdempotencyKey()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.StatusCodeKey,
+                            value: statusCode.ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
+                            value: hasUsedIdempotencyCache.ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.RemoteHostKey,
+                            value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.RemoteAddrKey,
+                            value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HttpForwardedForKey,
+                            value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
+
+                    return StatusCode(
+                        statusCode: cache.StatusCode,
+                        value: cache.Response);
+                }
+
+                var useCaseResult = await useCase.ExecuteUseCaseAsync(
+                    input: OAuthTenantAuthenticationUseCaseInput.Build(
+                        scope: TenantScopeValueObject.Build(input.Scope),
+                        credentials: TenantCredentialsValueObject.Build(
+                            clientId: clientId,
+                            clientSecret: clientSecret),
+                        grantType: GrantTypeValueObject.Build(input.GrantType)),
+                    auditableInfo: auditableInfo,
+                    cancellationToken: cancellationToken);
+
+                if (useCaseResult.IsSuccess)
+                {
+                    statusCode = StatusCodes.Status201Created;
+                    await SetCacheFromIdempotencyKeyAsync(
+                        actionCacheKey: actionCacheKey,
+                        statusCode: statusCode,
+                        content: useCaseResult.Output,
+                        auditableInfo: auditableInfo,
+                        cancellationToken: cancellationToken);
+
+                    activity.AppendSpanTag(
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HttpMethodKey,
+                            value: "HTTP POST"),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.EndpointKey,
+                            value: "api/v1/backoffice/student/create"),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.CorrelationIdKey,
+                            value: auditableInfo.GetCorrelationId().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.ExecutionUserKey,
+                            value: auditableInfo.GetExecutionUser()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.SourcePlatformKey,
+                            value: auditableInfo.GetSourcePlatform()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.IdempotencyKey,
+                            value: auditableInfo.GetIdempotencyKey()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.StatusCodeKey,
+                            value: statusCode.ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
+                            value: hasUsedIdempotencyCache.ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.RemoteHostKey,
+                            value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.RemoteAddrKey,
+                            value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.HttpForwardedForKey,
+                            value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
+
+                    return StatusCode(
+                        statusCode: statusCode,
+                        value: useCaseResult.Output);
+                }
+
+                if (useCaseResult.IsPartial)
+                    throw new NotImplementedException();
+
+                activity.AppendSpanTag(
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.HttpMethodKey,
+                        value: "HTTP POST"),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.EndpointKey,
+                        value: "api/v1/backoffice/student/create"),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.CorrelationIdKey,
+                        value: auditableInfo.GetCorrelationId().ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.ExecutionUserKey,
+                        value: auditableInfo.GetExecutionUser()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.SourcePlatformKey,
+                        value: auditableInfo.GetSourcePlatform()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.IdempotencyKey,
+                        value: auditableInfo.GetIdempotencyKey()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.StatusCodeKey,
+                        value: statusCode.ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.HasUsedIdempotencyCache,
+                        value: hasUsedIdempotencyCache.ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.RemoteHostKey,
+                        value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.RemoteAddrKey,
+                        value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
+                    KeyValuePair.Create(
+                        key: ObservabilityFacilitator.HttpForwardedForKey,
+                        value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
+
+                statusCode = StatusCodes.Status400BadRequest;
+
+                await SetCacheFromIdempotencyKeyAsync(
+                    actionCacheKey: actionCacheKey,
+                    statusCode: statusCode,
+                    content: useCaseResult.Notifications,
+                    auditableInfo: auditableInfo,
+                    cancellationToken: cancellationToken);
+
+                return StatusCode(
+                    statusCode: statusCode,
+                    value: useCaseResult.Notifications);
+            }, 
+            auditableInfo: auditableInfo,
+            cancellationToken: cancellationToken);
     }
 }

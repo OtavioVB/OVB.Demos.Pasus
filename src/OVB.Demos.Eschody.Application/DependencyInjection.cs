@@ -3,10 +3,16 @@ using OVB.Demos.Eschody.Application.Services.Internal.StudentContext;
 using OVB.Demos.Eschody.Application.Services.Internal.StudentContext.Interfaces;
 using OVB.Demos.Eschody.Application.Services.Internal.TenantContext;
 using OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Interfaces;
-using OVB.Demos.Eschody.Application.UseCases.CreateStudent;
-using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Inputs;
-using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Outputs;
 using OVB.Demos.Eschody.Application.UseCases.Interfaces;
+using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent;
+using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Inputs;
+using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Outputs;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.CreateTenant;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.CreateTenant.Inputs;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.CreateTenant.Outputs;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.OAuthTenantAuthentication;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.OAuthTenantAuthentication.Inputs;
+using OVB.Demos.Eschody.Application.UseCases.TenantContext.OAuthTenantAuthentication.Outputs;
 
 namespace OVB.Demos.Eschody.Application;
 
@@ -25,6 +31,9 @@ public static class DependencyInjection
         #region Use Cases Configuration
 
         serviceCollection.AddScoped<IUseCase<CreateStudentUseCaseInput, CreateStudentUseCaseResult>, CreateStudentUseCase>();
+        serviceCollection.AddScoped<IUseCase<CreateTenantUseCaseInput, CreateTenantUseCaseResult>, CreateTenantUseCase>();
+        serviceCollection.AddScoped<IUseCase<OAuthTenantAuthenticationUseCaseInput, OAuthTenantAuthenticationUseCaseResult>, 
+            OAuthTenantAuthenticationUseCase>();
 
         #endregion
     }

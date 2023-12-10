@@ -1,8 +1,8 @@
 ﻿using OVB.Demos.Eschody.Application.Services.Internal.StudentContext.Inputs;
 using OVB.Demos.Eschody.Application.Services.Internal.StudentContext.Interfaces;
-using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Inputs;
-using OVB.Demos.Eschody.Application.UseCases.CreateStudent.Outputs;
 using OVB.Demos.Eschody.Application.UseCases.Interfaces;
+using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Inputs;
+using OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Outputs;
 using OVB.Demos.Eschody.Infrascructure.EntityFrameworkCore.UnitOfWork.Interfaces;
 using OVB.Demos.Eschody.Libraries.NotificationContext;
 using OVB.Demos.Eschody.Libraries.Observability.Trace.Interfaces;
@@ -10,7 +10,7 @@ using OVB.Demos.Eschody.Libraries.ProcessResultContext;
 using OVB.Demos.Eschody.Libraries.ValueObjects;
 using System.Diagnostics;
 
-namespace OVB.Demos.Eschody.Application.UseCases.CreateStudent;
+namespace OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent;
 
 public sealed class CreateStudentUseCase : IUseCase<CreateStudentUseCaseInput, CreateStudentUseCaseResult>
 {
@@ -34,7 +34,7 @@ public sealed class CreateStudentUseCase : IUseCase<CreateStudentUseCaseInput, C
             traceName: $"{nameof(CreateStudentUseCase)}.{nameof(ExecuteUseCaseAsync)}",
             activityKind: ActivityKind.Internal,
             input: input,
-            handler: (inputBody, inputAuditableInfo, activity, inputCancellationToken) 
+            handler: (inputBody, inputAuditableInfo, activity, inputCancellationToken)
                 => _unitOfWork.ExecuteUnitOfWorkAsync(
                     handler: async (cancellationToken) =>
                     {

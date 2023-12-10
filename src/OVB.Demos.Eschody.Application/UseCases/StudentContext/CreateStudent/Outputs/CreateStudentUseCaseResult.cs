@@ -1,4 +1,4 @@
-﻿namespace OVB.Demos.Eschody.Application.UseCases.CreateStudent.Outputs;
+﻿namespace OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Outputs;
 
 public readonly struct CreateStudentUseCaseResult
 {

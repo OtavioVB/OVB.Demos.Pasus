@@ -1,16 +1,16 @@
 ﻿using OVB.Demos.Eschody.Domain.StudentContext.ENUMs;
 using OVB.Demos.Eschody.Domain.ValueObjects;
 
-namespace OVB.Demos.Eschody.Application.UseCases.CreateStudent.Inputs;
+namespace OVB.Demos.Eschody.Application.UseCases.StudentContext.CreateStudent.Inputs;
 
 public readonly struct CreateStudentUseCaseInput
 {
     private CreateStudentUseCaseInput(
-        FirstNameValueObject firstName, 
-        LastNameValueObject lastName, 
-        EmailValueObject email, 
-        PhoneValueObject phone, 
-        PasswordValueObject password, 
+        FirstNameValueObject firstName,
+        LastNameValueObject lastName,
+        EmailValueObject email,
+        PhoneValueObject phone,
+        PasswordValueObject password,
         TypeStudent typeStudent)
     {
         FirstName = firstName;

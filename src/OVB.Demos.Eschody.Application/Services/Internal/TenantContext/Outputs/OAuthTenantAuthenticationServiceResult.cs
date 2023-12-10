@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Domain.ValueObjects;
+﻿using OVB.Demos.Eschody.Application.UseCases.TenantContext.OAuthTenantAuthentication.Outputs;
+using OVB.Demos.Eschody.Domain.ValueObjects;
 
 namespace OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Outputs;
 
@@ -21,4 +22,7 @@ public readonly struct OAuthTenantAuthenticationServiceResult
 
     public static OAuthTenantAuthenticationServiceResult Build(GrantTypeValueObject grantType, TenantScopeValueObject scope, string type, string accessToken, int expiresIn)
         => new OAuthTenantAuthenticationServiceResult(grantType, scope, type, accessToken, expiresIn);
+
+    public OAuthTenantAuthenticationUseCaseResult Adapt()
+        => OAuthTenantAuthenticationUseCaseResult.Build(GrantType, Scope, Type, AccessToken, ExpiresIn);
 }

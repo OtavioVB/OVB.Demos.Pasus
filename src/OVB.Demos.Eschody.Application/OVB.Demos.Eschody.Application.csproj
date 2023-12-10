@@ -18,4 +18,8 @@
     <ProjectReference Include="..\OVB.Demos.Eschody.Infrascructure\OVB.Demos.Eschody.Infrascructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\TenantContext\OAuthTenantAuthentication\" />
+  </ItemGroup>
+
 </Project>

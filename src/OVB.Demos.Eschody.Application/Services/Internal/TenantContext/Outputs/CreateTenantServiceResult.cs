@@ -1,4 +1,5 @@
-﻿using OVB.Demos.Eschody.Domain.ValueObjects;
+﻿using OVB.Demos.Eschody.Application.UseCases.TenantContext.CreateTenant.Outputs;
+using OVB.Demos.Eschody.Domain.ValueObjects;
 
 namespace OVB.Demos.Eschody.Application.Services.Internal.TenantContext.Outputs;
 
@@ -35,4 +36,8 @@ public readonly struct CreateTenantServiceResult
 
     public static CreateTenantServiceResult Build(TenantCredentialsValueObject credentials, EmailValueObject email, PasswordValueObject password, ComercialNameValueObject comercialName, SocialReasonValueObject socialReason, CnaeCodeValueObject primaryCnaeCode, CnpjValueObject cnpj, CompositionValueObject composition, TenantScopeValueObject scope, FoundationDateValueObject foundationDate, DateTime isAvailableUntil, bool isEnabled)
         => new CreateTenantServiceResult(credentials, email, password, comercialName, socialReason, primaryCnaeCode, cnpj, composition, scope, foundationDate, isAvailableUntil, isEnabled);
+
+    public CreateTenantUseCaseResult Adapt()
+        => CreateTenantUseCaseResult.Build(Credentials, Email, Password, ComercialName, SocialReason, PrimaryCnaeCode, Cnpj, Composition, Scope, FoundationDate, IsAvailableUntil, IsEnabled);
+
 }
