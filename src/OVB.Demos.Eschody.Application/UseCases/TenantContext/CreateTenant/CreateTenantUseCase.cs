@@ -51,7 +51,7 @@ public sealed class CreateTenantUseCase : IUseCase<CreateTenantUseCaseInput, Cre
                         if (createTenantServiceResult.IsPartial)
                             throw new NotImplementedException();
 
-                        return (true, ProcessResult<Notification, CreateTenantUseCaseResult>.BuildErrorfullProcessResult(
+                        return (true, ProcessResult<Notification, CreateTenantUseCaseResult>.BuildSuccessfullProcessResult(
                                 output: createTenantServiceResult.Output.Adapt(),
                                 notifications: createTenantServiceResult.Notifications,
                                 exceptions: createTenantServiceResult.Exceptions));

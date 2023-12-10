@@ -53,8 +53,7 @@ public readonly struct CnpjValueObject
             return new CnpjValueObject(
                 isValid: true,
                 cnpj: cnpj,
-                processResult: ProcessResult<Notification>.BuildSuccessfullProcessResult(
-                    notifications: null));
+                processResult: ProcessResult<Notification>.BuildSuccessfullProcessResult());
     }
 
     public string GetCnpj()
