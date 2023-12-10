@@ -82,4 +82,20 @@ public static class NotificationFacilitator
     public static Notification TenantExistsDomain = Notification.BuildErrorfullNotification(
        code: "PASUS25",
        message: $"O CNPJ utilizado pela corporativa já possui cadastro.");
+    public static Notification GrantTypeValid = Notification.BuildErrorfullNotification(
+       code: "PASUS26",
+       message: $"O tipo de concessão de autorização precisa ser um tipo válido associado.");
+    public static Notification TenantNotExists = Notification.BuildErrorfullNotification(
+       code: "PASUS27",
+       message: $"Não foi possível encontrar a aplicação cliente pelo seu identificador.");
+    public static Notification TenantClientSecretInvalid = Notification.BuildErrorfullNotification(
+       code: "PASUS28",
+       message: $"A chave secreta inserida para a aplicação cliente não é válida.");
+    public static Notification TenantIsNotAvailable(DateTime isAvailableUntil) => Notification.BuildErrorfullNotification(
+       code: "PASUS29",
+       message: $"A aplicação cliente não está apta para ser autorizada. Última disponibilidade: {DateTime.SpecifyKind(isAvailableUntil, DateTimeKind.Unspecified).AddHours(-3).ToString("dd/MM/yyyy HH:mm:ss")}.");
+    public static Notification TenantIsEnabled = Notification.BuildErrorfullNotification(
+       code: "PASUS30",
+       message: $"A aplicação cliente não está habilitada nesse momento.");
+
 }
