@@ -33,7 +33,7 @@ public readonly struct SocialReasonValueObject
         if (socialReason.Length < MinLength)
             notifications.Add(NotificationFacilitator.SocialReasonMinLength);
 
-        if (hasNotification == true)
+        if (hasNotification)
             return new SocialReasonValueObject(
                 isValid: false,
                 socialReason: string.Empty,

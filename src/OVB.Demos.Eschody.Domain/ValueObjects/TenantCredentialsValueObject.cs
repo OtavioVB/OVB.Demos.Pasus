@@ -34,7 +34,7 @@ public readonly struct TenantCredentialsValueObject
                 isValid: false,
                 clientId: clientId,
                 clientSecret: clientSecret,
-                processResult: ProcessResult<Notification>.BuildSuccessfullProcessResult(
+                processResult: ProcessResult<Notification>.BuildErrorfullProcessResult(
                     notifications: notifications.ToArray(),
                     exceptions: null));
         }

@@ -33,7 +33,7 @@ public readonly struct ComercialNameValueObject
         if (comercialName.Length < MinLength)
             notifications.Add(NotificationFacilitator.ComercialNameMinLength);
 
-        if (hasNotification == true)
+        if (hasNotification)
             return new ComercialNameValueObject(
                 isValid: false,
                 comercialName: string.Empty,

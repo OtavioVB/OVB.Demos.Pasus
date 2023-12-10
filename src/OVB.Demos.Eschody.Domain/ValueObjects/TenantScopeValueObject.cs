@@ -50,7 +50,7 @@ public readonly struct TenantScopeValueObject
             }
         }
 
-        if (hasNotifications == false)
+        if (!hasNotifications)
             return new TenantScopeValueObject(
                 isValid: true,
                 scope: scope,
@@ -60,7 +60,7 @@ public readonly struct TenantScopeValueObject
             return new TenantScopeValueObject(
                 isValid: false,
                 scope: string.Empty,
-                processResult: ProcessResult<Notification>.BuildSuccessfullProcessResult(
+                processResult: ProcessResult<Notification>.BuildErrorfullProcessResult(
                     notifications: notifications.ToArray()));
     }
 

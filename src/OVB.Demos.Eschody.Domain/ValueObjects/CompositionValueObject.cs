@@ -25,7 +25,7 @@ public readonly struct CompositionValueObject
         var notifications = new List<Notification>(1);
         var enumComposition = (TypeTenantComposition)composition;
 
-        if (!Enum.IsDefined<TypeTenantComposition>(enumComposition))
+        if (!Enum.IsDefined(enumComposition))
         {
             hasNotifications = true;
             notifications.Add(NotificationFacilitator.CompositionNeedsToBeValid);
@@ -42,7 +42,7 @@ public readonly struct CompositionValueObject
             return new CompositionValueObject(
                 isValid: false,
                 composition: enumComposition,
-                processResult: ProcessResult<Notification>.BuildSuccessfullProcessResult(
+                processResult: ProcessResult<Notification>.BuildErrorfullProcessResult(
                     notifications: notifications.ToArray(),
                     exceptions: null));
     }

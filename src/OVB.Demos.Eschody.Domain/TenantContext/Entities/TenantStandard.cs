@@ -56,8 +56,7 @@ public class TenantStandard : ICreateTenantDomainFunction, IOAuthTenantAuthentic
             arg2: auditableInfo,
             arg3: cancellationToken);
 
-        var requiredValidation = ProcessResult<Notification>.BuildFromAnotherProcessResult(
-            ValidateThatTenantDoesNotExistsYet(tenantExists));
+        var requiredValidation = ValidateThatTenantDoesNotExistsYet(tenantExists);
 
         if (requiredValidation.IsError)
             return ProcessResult<Notification, CreateTenantDomainFunctionResult>.BuildErrorfullProcessResult(

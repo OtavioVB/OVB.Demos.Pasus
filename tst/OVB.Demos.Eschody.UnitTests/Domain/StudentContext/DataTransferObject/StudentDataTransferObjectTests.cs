@@ -15,7 +15,7 @@ public sealed class StudentDataTransferObjectTests
         var correlationId = Guid.NewGuid();
         var executionUser = "UserTest";
         var sourcePlatform = ".NET/UnitTests.cs";
-        var auditableInfo = AuditableInfoValueObject.Build(correlationId, sourcePlatform, executionUser, DateTime.UtcNow);
+        var auditableInfo = AuditableInfoValueObject.Build(correlationId, sourcePlatform, executionUser, DateTime.UtcNow, "1233154356");
 
         // Act
         var student = Student.BuildStudent(
