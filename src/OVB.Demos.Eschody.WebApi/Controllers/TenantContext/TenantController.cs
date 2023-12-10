@@ -175,15 +175,14 @@ public sealed class TenantController : CustomControllerBase
                         primaryCnaeCode: useCaseResult.Output.PrimaryCnaeCode.GetCnaeCode(),
                         composition: (int)useCaseResult.Output.Composition.GetComposition(),
                         scope: useCaseResult.Output.Scope.GetScope(),
-                        foundationDate: DateTime.SpecifyKind(useCaseResult.Output.FoundationDate.GetFoundationDate(), 
-                            DateTimeKind.Unspecified).AddHours(-3).ToString("dd/MM/yyyy"),
+                        foundationDate: useCaseResult.Output.FoundationDate.GetFoundationDate().ToString("dd/MM/yyyy"),
                         isAvailableUntil: useCaseResult.Output.IsAvailableUntil,
                         isEnabled: useCaseResult.Output.IsEnabled);
                     statusCode = StatusCodes.Status201Created;
                     await SetCacheFromIdempotencyKeyAsync(
                         actionCacheKey: actionCacheKey,
                         statusCode: statusCode,
-                        content: useCaseResult.Output,
+                        content: sendload,
                         auditableInfo: auditableInfo,
                         cancellationToken: cancellationToken);
 
@@ -224,7 +223,7 @@ public sealed class TenantController : CustomControllerBase
 
                     return StatusCode(
                         statusCode: statusCode,
-                        value: useCaseResult.Output);
+                        value: sendload);
                 }
 
                 if (useCaseResult.IsPartial)

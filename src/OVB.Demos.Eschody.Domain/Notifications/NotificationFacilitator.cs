@@ -93,7 +93,7 @@ public static class NotificationFacilitator
        message: $"A chave secreta inserida para a aplicação cliente não é válida.");
     public static Notification TenantIsNotAvailable(DateTime isAvailableUntil) => Notification.BuildErrorfullNotification(
        code: "PASUS29",
-       message: $"A aplicação cliente não está apta para ser autorizada. Última disponibilidade: {DateTime.SpecifyKind(isAvailableUntil, DateTimeKind.Unspecified).AddHours(-3).ToString("dd/MM/yyyy HH:mm:ss")}.");
+       message: $"A aplicação cliente não está apta para ser autorizada. Última disponibilidade: {isAvailableUntil.ToString("dd/MM/yyyy HH:mm:ss")}.");
     public static Notification TenantIsEnabled = Notification.BuildErrorfullNotification(
        code: "PASUS30",
        message: $"A aplicação cliente não está habilitada nesse momento.");
