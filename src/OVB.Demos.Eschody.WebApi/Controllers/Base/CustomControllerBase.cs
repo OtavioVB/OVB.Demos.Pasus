@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OVB.Demos.Eschody.Domain.ValueObjects;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Interfaces;
 using OVB.Demos.Eschody.Infrascructure.Redis.Repositories.Models;
@@ -26,6 +27,39 @@ public abstract class CustomControllerBase : ControllerBase
         _traceManager = traceManager;
         _cacheRepository = cacheRepository;
         _metricManager = metricManager;
+    }
+
+    public IActionResult StatusCodeMiddleware(
+        int statusCode, object? result, Activity activity, bool hasUsedIdempotencyCache)
+    {
+        activity.AppendSpanTag(
+            KeyValuePair.Create(
+                key: ObservabilityFacilitator.StatusCodeKey,
+                value: statusCode.ToString()),
+            KeyValuePair.Create(
+                key: ObservabilityFacilitator.HasUsedIdempotencyCache,
+                value: hasUsedIdempotencyCache.ToString()));
+
+        return StatusCode(
+            statusCode: statusCode,
+            value: result);
+    }
+
+    public bool VerifyAuthenticationIsAuthorizationToScope(string authorizationScope, string endpointScope)
+    {
+        var authorizationScopes = authorizationScope.Split(' ');
+        var hasAccess = false;
+
+        foreach (var uniqueScope in authorizationScopes)
+        {
+            if (uniqueScope == endpointScope)
+            {
+                hasAccess = true;
+                break;
+            }
+        }
+
+        return hasAccess;
     }
 
     public async Task SetCacheFromIdempotencyKeyAsync(string actionCacheKey, int statusCode, object? content, AuditableInfoValueObject auditableInfo,
@@ -66,5 +100,10 @@ public abstract class CustomControllerBase : ControllerBase
     public CustomUnprocessableEntityResult GetUnprocessableEntityForInvalidAuditable()
         => CustomUnprocessableEntityResult.Build(
             propertyName: nameof(AuditableInfoValueObject),
-            propertyDescription: "The auditable info data is invalid.");
+            propertyDescription: "As informações de auditabilidade são inválidas.");
+
+    public CustomUnprocessableEntityResult GetUnauthorizedEntityForInvalidScope()
+        => CustomUnprocessableEntityResult.Build(
+            propertyName: nameof(TenantScopeValueObject),
+            propertyDescription: "O escopo da chave de autenticação não tange esse endpoint.");
 }

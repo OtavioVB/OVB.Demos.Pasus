@@ -18,6 +18,8 @@ public readonly struct TenantScopeValueObject
         ProcessResult = processResult;
     }
 
+    public static string AuthorizationScopeKey = "Scope";
+
     public static TenantScopeValueObject Build(string scope)
     {
         var scopesExists = new List<string>()

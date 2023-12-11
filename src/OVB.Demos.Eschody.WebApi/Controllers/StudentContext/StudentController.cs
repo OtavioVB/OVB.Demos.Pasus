@@ -61,10 +61,13 @@ public sealed class StudentController : CustomControllerBase
             input: input,
             handler: async (inputTrace, inputAuditableInfo, inputActivity, inputCancellationToken) =>
             {
+                var endpointScope = "student.create";
                 var actionCacheKey = inputAuditableInfo.GenerateCacheKeyWithIdempotencyKey(
                         cacheKey: nameof(HttpPostCreateStudentServiceAsync));
                 var statusCode = 503;
                 var hasUsedIdempotencyCache = false;
+
+                #region Response Headers Prepair Configuration
 
                 HttpContext.Response.Headers.Append(AuditableInfoValueObject.CorrelationIdKey, inputAuditableInfo.GetCorrelationId().ToString());
                 HttpContext.Response.Headers.Append(AuditableInfoValueObject.RequestedAtKey, inputAuditableInfo.GetRequestedAt().ToString("dd/MM/yyyy HH:mm:ss"));
@@ -72,33 +75,11 @@ public sealed class StudentController : CustomControllerBase
                 HttpContext.Response.Headers.Append(AuditableInfoValueObject.ExecutionUserKey, inputAuditableInfo.GetExecutionUser());
                 HttpContext.Response.Headers.Append(AuditableInfoValueObject.IdempotencyHeaderKey, inputAuditableInfo.GetIdempotencyKey());
 
-                _metricManager.CreateCounterIfNotExists(
-                    counterName: nameof(HttpPostCreateStudentServiceAsync));
-                _metricManager.IncrementCounter(
-                    counterName: nameof(HttpPostCreateStudentServiceAsync),
-                    auditableInfo: inputAuditableInfo,
-                    keyValuePairs: [
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.CorrelationIdKey,
-                            value: (object?)inputAuditableInfo.GetCorrelationId().ToString()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.SourcePlatformKey,
-                            value: (object?)inputAuditableInfo.GetSourcePlatform().ToString()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.ExecutionUserKey,
-                            value: (object?)inputAuditableInfo.GetExecutionUser().ToString())
-                    ]);
+                #endregion
 
-                var cache = await GetCacheFromIdempotencyKeyAsync(
-                    actionCacheKey: actionCacheKey,
-                    auditableInfo: inputAuditableInfo,
-                    cancellationToken: inputCancellationToken);
-                if (cache is not null)
-                {
-                    statusCode = cache.StatusCode;
-                    hasUsedIdempotencyCache = true;
+                #region Activity Span Tags Configuration
 
-                    inputActivity.AppendSpanTag(
+                inputActivity.AppendSpanTag(
                         KeyValuePair.Create(
                             key: ObservabilityFacilitator.HttpMethodKey,
                             value: "HTTP POST"),
@@ -118,12 +99,6 @@ public sealed class StudentController : CustomControllerBase
                             key: ObservabilityFacilitator.IdempotencyKey,
                             value: inputAuditableInfo.GetIdempotencyKey()),
                         KeyValuePair.Create(
-                            key: ObservabilityFacilitator.StatusCodeKey,
-                            value: statusCode.ToString()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
-                            value: hasUsedIdempotencyCache.ToString()),
-                        KeyValuePair.Create(
                             key: ObservabilityFacilitator.RemoteHostKey,
                             value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
                         KeyValuePair.Create(
@@ -133,9 +108,55 @@ public sealed class StudentController : CustomControllerBase
                             key: ObservabilityFacilitator.HttpForwardedForKey,
                             value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
 
-                    return StatusCode(
-                        statusCode: cache.StatusCode,
-                        value: cache.Response);
+                #endregion
+
+                #region Metrics Endpoint Configuration
+
+                _metricManager.CreateCounterIfNotExists(
+                    counterName: nameof(HttpPostCreateStudentServiceAsync));
+                _metricManager.IncrementCounter(
+                    counterName: nameof(HttpPostCreateStudentServiceAsync),
+                    auditableInfo: inputAuditableInfo,
+                    keyValuePairs: [
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.CorrelationIdKey,
+                            value: (object?)inputAuditableInfo.GetCorrelationId().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.SourcePlatformKey,
+                            value: (object?)inputAuditableInfo.GetSourcePlatform().ToString()),
+                        KeyValuePair.Create(
+                            key: ObservabilityFacilitator.ExecutionUserKey,
+                            value: (object?)inputAuditableInfo.GetExecutionUser().ToString())
+                    ]);
+
+                #endregion
+
+                #region Scope Endpoint Configuration
+
+                if (VerifyAuthenticationIsAuthorizationToScope(
+                    authorizationScope: HttpContext.User.FindFirst(TenantScopeValueObject.AuthorizationScopeKey)!.Value.ToString(),
+                    endpointScope: endpointScope) == false)
+                {
+                    statusCode = 401;
+                    return StatusCodeMiddleware(statusCode, GetUnauthorizedEntityForInvalidScope(), inputActivity, hasUsedIdempotencyCache);
+                }
+
+                #endregion
+
+                var cache = await GetCacheFromIdempotencyKeyAsync(
+                    actionCacheKey: actionCacheKey,
+                    auditableInfo: inputAuditableInfo,
+                    cancellationToken: inputCancellationToken);
+                if (cache is not null)
+                {
+                    statusCode = cache.StatusCode;
+                    hasUsedIdempotencyCache = true;
+
+                    return StatusCodeMiddleware(
+                        statusCode: statusCode,
+                        result: cache.Response,
+                        activity: inputActivity,
+                        hasUsedIdempotencyCache: hasUsedIdempotencyCache);
                 }
 
                 var useCaseResult = await useCase.ExecuteUseCaseAsync(
@@ -161,84 +182,18 @@ public sealed class StudentController : CustomControllerBase
 
                     inputActivity.AppendSpanTag(
                         KeyValuePair.Create(
-                            key: ObservabilityFacilitator.HttpMethodKey,
-                            value: "HTTP POST"),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.EndpointKey,
-                            value: "api/v1/backoffice/student/create"),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.CorrelationIdKey,
-                            value: inputAuditableInfo.GetCorrelationId().ToString()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.ExecutionUserKey,
-                            value: inputAuditableInfo.GetExecutionUser()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.SourcePlatformKey,
-                            value: inputAuditableInfo.GetSourcePlatform()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.IdempotencyKey,
-                            value: inputAuditableInfo.GetIdempotencyKey()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.StatusCodeKey,
-                            value: statusCode.ToString()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.HasUsedIdempotencyCache,
-                            value: hasUsedIdempotencyCache.ToString()),
-                        KeyValuePair.Create(
                             key: nameof(CreateStudentUseCaseResult.StudentId),
-                            value: useCaseResult.Output.StudentId.ToString()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.RemoteHostKey,
-                            value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.RemoteAddrKey,
-                            value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
-                        KeyValuePair.Create(
-                            key: ObservabilityFacilitator.HttpForwardedForKey,
-                            value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
+                            value: useCaseResult.Output.StudentId.ToString()));
 
-                    return StatusCode(
+                    return StatusCodeMiddleware(
                         statusCode: statusCode,
-                        value: useCaseResult.Output);
+                        result: useCaseResult.Notifications,
+                        activity: inputActivity,
+                        hasUsedIdempotencyCache: hasUsedIdempotencyCache);
                 }
 
                 if (useCaseResult.IsPartial)
                     throw new NotImplementedException();
-
-                inputActivity.AppendSpanTag(
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.HttpMethodKey,
-                        value: "HTTP POST"),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.EndpointKey,
-                        value: "api/v1/backoffice/student/create"),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.CorrelationIdKey,
-                        value: inputAuditableInfo.GetCorrelationId().ToString()),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.ExecutionUserKey,
-                        value: inputAuditableInfo.GetExecutionUser()),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.SourcePlatformKey,
-                        value: inputAuditableInfo.GetSourcePlatform()),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.IdempotencyKey,
-                        value: inputAuditableInfo.GetIdempotencyKey()),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.StatusCodeKey,
-                        value: statusCode.ToString()),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.HasUsedIdempotencyCache,
-                        value: hasUsedIdempotencyCache.ToString()),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.RemoteHostKey,
-                        value: HttpContext.Request.Headers["REMOTE_HOST"].ToString()),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.RemoteAddrKey,
-                        value: HttpContext.Request.Headers["REMOTE_ADDR"].ToString()),
-                    KeyValuePair.Create(
-                        key: ObservabilityFacilitator.HttpForwardedForKey,
-                        value: HttpContext.Request.Headers["HTTP_X_FORWARDED_FOR"].ToString()));
 
                 statusCode = StatusCodes.Status400BadRequest;
 
@@ -249,9 +204,11 @@ public sealed class StudentController : CustomControllerBase
                     auditableInfo: inputAuditableInfo,
                     cancellationToken: cancellationToken);
 
-                return StatusCode(
+                return StatusCodeMiddleware(
                     statusCode: statusCode,
-                    value: useCaseResult.Notifications);
+                    result: useCaseResult.Notifications,
+                    activity: inputActivity,
+                    hasUsedIdempotencyCache: hasUsedIdempotencyCache);
             },
             auditableInfo: auditableInfo,
             cancellationToken: cancellationToken);
