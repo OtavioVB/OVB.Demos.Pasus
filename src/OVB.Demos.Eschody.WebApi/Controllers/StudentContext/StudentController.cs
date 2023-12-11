@@ -61,11 +61,15 @@ public sealed class StudentController : CustomControllerBase
             input: input,
             handler: async (inputTrace, inputAuditableInfo, inputActivity, inputCancellationToken) =>
             {
+                #region Variables of initialization of endpoint
+
                 var endpointScope = "student.create";
                 var actionCacheKey = inputAuditableInfo.GenerateCacheKeyWithIdempotencyKey(
                         cacheKey: nameof(HttpPostCreateStudentServiceAsync));
                 var statusCode = 503;
                 var hasUsedIdempotencyCache = false;
+
+                #endregion
 
                 #region Response Headers Prepair Configuration
 
@@ -133,9 +137,7 @@ public sealed class StudentController : CustomControllerBase
 
                 #region Scope Endpoint Configuration
 
-                if (VerifyAuthenticationIsAuthorizationToScope(
-                    authorizationScope: HttpContext.User.FindFirst(TenantScopeValueObject.AuthorizationScopeKey)!.Value.ToString(),
-                    endpointScope: endpointScope) == false)
+                if (VerifyAuthenticationIsAuthorizationToScope(endpointScope) == false)
                 {
                     statusCode = 401;
                     return StatusCodeMiddleware(statusCode, GetUnauthorizedEntityForInvalidScope(), inputActivity, hasUsedIdempotencyCache);
@@ -187,7 +189,7 @@ public sealed class StudentController : CustomControllerBase
 
                     return StatusCodeMiddleware(
                         statusCode: statusCode,
-                        result: useCaseResult.Notifications,
+                        result: useCaseResult.Output,
                         activity: inputActivity,
                         hasUsedIdempotencyCache: hasUsedIdempotencyCache);
                 }

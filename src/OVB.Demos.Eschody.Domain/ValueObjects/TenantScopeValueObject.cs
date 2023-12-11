@@ -18,7 +18,7 @@ public readonly struct TenantScopeValueObject
         ProcessResult = processResult;
     }
 
-    public static string AuthorizationScopeKey = "Scope";
+    public static string AuthorizationScopeKey = "Scopes";
 
     public static TenantScopeValueObject Build(string scope)
     {

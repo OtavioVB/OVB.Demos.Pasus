@@ -45,9 +45,9 @@ public abstract class CustomControllerBase : ControllerBase
             value: result);
     }
 
-    public bool VerifyAuthenticationIsAuthorizationToScope(string authorizationScope, string endpointScope)
+    public bool VerifyAuthenticationIsAuthorizationToScope(string endpointScope)
     {
-        var authorizationScopes = authorizationScope.Split(' ');
+        var authorizationScopes = HttpContext.User.FindFirst(TenantScopeValueObject.AuthorizationScopeKey)!.Value.Split(' ');
         var hasAccess = false;
 
         foreach (var uniqueScope in authorizationScopes)
