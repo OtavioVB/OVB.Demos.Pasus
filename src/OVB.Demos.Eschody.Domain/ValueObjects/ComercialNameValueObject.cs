@@ -28,10 +28,16 @@ public readonly struct ComercialNameValueObject
         var notifications = new List<Notification>(2);
 
         if (comercialName.Length > MaxLength)
+        {
             notifications.Add(NotificationFacilitator.ComercialNameMaxLength);
+            hasNotification = true;
+        }
 
         if (comercialName.Length < MinLength)
+        {
             notifications.Add(NotificationFacilitator.ComercialNameMinLength);
+            hasNotification = true;
+        }
 
         if (hasNotification)
             return new ComercialNameValueObject(

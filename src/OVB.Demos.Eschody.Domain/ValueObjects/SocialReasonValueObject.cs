@@ -28,10 +28,16 @@ public readonly struct SocialReasonValueObject
         var notifications = new List<Notification>(2);
 
         if (socialReason.Length > MaxLength)
+        {
             notifications.Add(NotificationFacilitator.SocialReasonMaxLength);
+            hasNotification = true;
+        }
 
         if (socialReason.Length < MinLength)
+        {
             notifications.Add(NotificationFacilitator.SocialReasonMinLength);
+            hasNotification = true;
+        }
 
         if (hasNotification)
             return new SocialReasonValueObject(
